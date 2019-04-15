@@ -16,15 +16,9 @@ namespace HWEnchCalc
        public MainWindow()
         {
             InitializeComponent();
-            //FlipView.HideControlButtons();
 
             var config = ConfigurationHelper.GetConfig();
             DataContext = new HwEnchCalcViewModel(config);
-        }
-
-        private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("");
         }
 
         private void DataGrid_OnAutoGeneratingColumn(object sender, DataGridAutoGeneratingColumnEventArgs e)
@@ -35,11 +29,6 @@ namespace HWEnchCalc
                 e.Column.Header = att.Name;
                 e.Cancel = att.IsHide;
             }
-        }
-
-        private void EventSetter_OnHandler(object sender, MouseButtonEventArgs e)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

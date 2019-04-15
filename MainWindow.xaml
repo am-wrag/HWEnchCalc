@@ -22,7 +22,7 @@
 
     <mah:MetroWindow.RightWindowCommands>
         <mah:WindowCommands>
-            <Button Content="Layers" Cursor="Hand" Click="ButtonBase_OnClick" />
+            <Button Content="Layers" Cursor="Hand" />
         </mah:WindowCommands>
     </mah:MetroWindow.RightWindowCommands>
     <Window.Resources>
