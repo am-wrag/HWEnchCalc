@@ -9,14 +9,13 @@ namespace HWEnchCalc.Core
 {
     public class HwEnchCalcViewModel : NotifyPropertyChangedBase
     {
-        public TitanBaseStats TitanBaseStats { get; set; }
+        public TitanBaseStats TitanBaseStats { get; set; } = new TitanBaseStats();
         public TitanEssenceCalc TitanEssenceCalc { get; set; }
         public TitanGoldCalc TitanGoldCalc { get; set; }
         public CalculatorManager CalcManager { get; set; } = new CalculatorManager();
 
         public HwEnchCalcViewModel(Configuration config)
         {
-            TitanBaseStats = new TitanBaseStats();
             TitanEssenceCalc = new TitanEssenceCalc(TitanBaseStats, config);
             TitanGoldCalc = new TitanGoldCalc(TitanBaseStats, config);
             GetBaseArtefactInfo(config);

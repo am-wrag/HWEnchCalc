@@ -21,18 +21,38 @@ namespace HWEnchCalc.Titan
 
         private void GetArtInfo(Configuration config)
         {
-            FirstArtLevels = ParseToTitanLevels(config.CalculatorInfo.ArtefactLevelInfo.FirstArtLevelsPath).ToList();
-            SecondArtLevels = ParseToTitanLevels(config.CalculatorInfo.ArtefactLevelInfo.SecondArtLevelsPath).ToList();
-            ThirdAtcArtLevels = ParseToTitanLevels(config.CalculatorInfo.ArtefactLevelInfo.ThirdArtActTypeLevelsPath)
-                .ToList();
-            ThirdDefArtLevels = ParseToTitanLevels(config.CalculatorInfo.ArtefactLevelInfo.ThirdArtDefTypeLevelsPath)
-                .ToList();
-            ThirdSuppArtLevels = ParseToTitanLevels(config.CalculatorInfo.ArtefactLevelInfo.ThirdArtSuppTypeLevelsPath)
-                .ToList();
+            var artInfo = config.CalculatorInfo.ArtefactLevelInfo;
+            if (artInfo == null)
+            {
+                return;
+            }
+
+            if (File.Exists(artInfo.FirstArtLevelsPath))
+            {
+                FirstArtLevels = ParseToTitanLevels(artInfo.FirstArtLevelsPath).ToList();
+            }
+            if (File.Exists(artInfo.SecondArtLevelsPath))
+            {
+                SecondArtLevels = ParseToTitanLevels(artInfo.SecondArtLevelsPath).ToList();
+            }
+            if (File.Exists(artInfo.ThirdArtActTypeLevelsPath))
+            {
+                ThirdAtcArtLevels = ParseToTitanLevels(artInfo.ThirdArtActTypeLevelsPath).ToList();
+            }
+            if (File.Exists(artInfo.ThirdArtDefTypeLevelsPath))
+            {
+                ThirdDefArtLevels = ParseToTitanLevels(artInfo.ThirdArtDefTypeLevelsPath).ToList();
+            }
+            if (File.Exists(artInfo.ThirdArtSuppTypeLevelsPath))
+            {
+                ThirdSuppArtLevels = ParseToTitanLevels(artInfo.ThirdArtSuppTypeLevelsPath).ToList();
+            }
         }
 
         public static IEnumerable<TitanArtLevelUp> ParseToTitanLevels(string levelsFilePath)
         {
+            
+
             var levelsData = File.ReadAllLines(levelsFilePath);
 
             var levels = levelsData
