@@ -5,19 +5,31 @@ namespace HWEnchCalc.Titan
 {
     public class ArtefactInfo : NotifyPropertyChangedBase
     {
-        [Key] public int Id { get; set; }
-        public string LevelInfo
+        [Key] public int Id { get; set; } = new  int();
+        public string LevelUpInfo
         {
             get => _levelInfo;
             set
             {
                 _levelInfo = value;
                 SetArtefactParametersByLevelTable();
+                PropertyChangedByMember();
             }
         }
-        public ArtefactType ArtefactType { get; set; }
-
-        public double BaseStatValue
+        public int StarCount
+        {
+            get => _starCount;
+            set
+            {
+                _starCount = value;
+                UpdateStatsByStarCount();
+                PropertyChangedByMember();
+            }
+        }
+        /// <summary>
+        /// Количество стата на данном уровне
+        /// </summary>
+        public double StatValue
         {
             get => _baseStatValue * _starRaito;
             set
@@ -26,7 +38,10 @@ namespace HWEnchCalc.Titan
                 PropertyChangedByMember();
             }
         }
-
+        
+        /// <summary>
+        /// На сколько увеличится стат при изменение уровня на +1
+        /// </summary>
         public double IncreaseStatValue
         {
             get => _increaseStatValue * _starRaito;
@@ -36,7 +51,9 @@ namespace HWEnchCalc.Titan
                 PropertyChangedByMember();
             }
         }
-
+        /// <summary>
+        /// Количество эссенций нужное для повышения уровня
+        /// </summary>
         public double EssenceValue
         {
             get => _essenceValue;
@@ -47,16 +64,7 @@ namespace HWEnchCalc.Titan
             }
         }
 
-        public int StarCount
-        {
-            get => _starCount;
-            set
-            {
-                _starCount = value;
-                UpdateStatsByStarCount();
-            }
-        }
-
+        public ArtefactType ArtefactType { get; set; }
 
         private double _baseStatValue;
         private double _increaseStatValue;
@@ -72,10 +80,10 @@ namespace HWEnchCalc.Titan
         private void SetArtefactParametersByLevelTable()
         {
             var artLvlUp = SourceArtLevelUpInfo.GetArtefactLevelUpInfo(_levelInfo, ArtefactType);
-            BaseStatValue = artLvlUp.StatValue;
+            StatValue = artLvlUp.StatValue;
             EssenceValue = artLvlUp.EssenceValue;
             IncreaseStatValue = artLvlUp.IncreaseStatValue;
-            PropertyChangedByName(nameof(BaseStatValue));
+            PropertyChangedByName(nameof(StatValue));
             PropertyChangedByName(nameof(EssenceValue));
             PropertyChangedByName(nameof(IncreaseStatValue));
         }
@@ -83,8 +91,18 @@ namespace HWEnchCalc.Titan
         private void UpdateStatsByStarCount()
         {
             _starRaito = TitanHelper.GetArtefactStarRaito(ArtefactType, StarCount);
-            PropertyChangedByName(nameof(BaseStatValue));
+            PropertyChangedByName(nameof(StatValue));
             PropertyChangedByName(nameof(IncreaseStatValue));
+        }
+
+        public void Update(ArtefactInfo artInfo)
+        {
+            LevelUpInfo = artInfo.LevelUpInfo;
+            StarCount = artInfo.StarCount;
+            StatValue = artInfo.StatValue;
+            IncreaseStatValue = artInfo.IncreaseStatValue;
+            EssenceValue = artInfo.EssenceValue;
+            ArtefactType = artInfo.ArtefactType;
         }
     }
 }

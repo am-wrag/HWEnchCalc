@@ -51,8 +51,6 @@ namespace HWEnchCalc.Titan
 
         public static IEnumerable<TitanArtLevelUp> ParseToTitanLevels(string levelsFilePath)
         {
-            
-
             var levelsData = File.ReadAllLines(levelsFilePath);
 
             var levels = levelsData

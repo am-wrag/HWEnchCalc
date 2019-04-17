@@ -176,6 +176,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Calculators\EssenceCalc\EssCalcResultManager.cs" />
     <Compile Include="Titan\TitanHelper.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -195,21 +196,22 @@
     <Compile Include="Titan\SourceArtLevelUpInfo.cs" />
     <Compile Include="Config\CalculatorInfo.cs" />
     <Compile Include="Config\Configuration.cs" />
-    <Compile Include="Config\ConfigurationHelper.cs" />
+    <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Config\ConnectionInfo.cs" />
     <Compile Include="Config\WindowProperties.cs" />
     <Compile Include="Core\CalculatorManager.cs" />
     <Compile Include="Titan\ArtefactType.cs" />
     <Compile Include="Common\CulumnAttribute.cs" />
-    <Compile Include="Calculatros\EssenceCalc\EssenceCalcShortInfo.cs" />
-    <Compile Include="Titan\TitanBaseStats.cs" />
+    <Compile Include="Calculators\EssenceCalc\EssenceCalcResultShort.cs" />
+    <Compile Include="Titan\TitanSourceInfo.cs" />
+    <Compile Include="Titan\TitanStats.cs" />
     <Compile Include="Common\WpfCommand.cs" />
-    <Compile Include="Calculatros\TitanEssenceCalc.cs" />
-    <Compile Include="Calculatros\TitanGoldCalc.cs" />
+    <Compile Include="Calculators\TitanEssenceCalc.cs" />
+    <Compile Include="Calculators\TitanGoldCalc.cs" />
     <Compile Include="DB\DbOperator.cs" />
     <Compile Include="Common\JsonParser.cs" />
     <Compile Include="Titan\ArtefactInfo.cs" />
-    <Compile Include="Calculatros\EssenceCalc\EssenceCalcInfo.cs" />
+    <Compile Include="Calculators\EssenceCalc\EssenceCalcResult.cs" />
     <Compile Include="Core\HwEnchCalcViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

@@ -1,12 +1,12 @@
 ﻿using HWEnchCalc.Config;
 using HWEnchCalc.Titan;
 
-namespace HWEnchCalc.Calculatros
+namespace HWEnchCalc.Calculators
 {
     public class TitanGoldCalc
     {
 
-        public TitanGoldCalc(TitanBaseStats titanBaseStats, Configuration config)
+        public TitanGoldCalc(TitanStats titanBaseStats, Configuration config)
         {
 
         }

@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Drawing.Text;
-using System.Threading;
 using System.Windows.Media.Imaging;
 
 namespace HWEnchCalc.Titan
@@ -62,7 +60,6 @@ namespace HWEnchCalc.Titan
                     return new BitmapImage(new Uri("Titan/TitanPic/Silva.png", UriKind.Relative));
                 case Avalon:
                     return new BitmapImage(new Uri("Titan/TitanPic/Avalon.png", UriKind.Relative));
-
                 default:
                     return new BitmapImage();
             }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using HWEnchCalc.Calculatros.EssenceCalc;
+using HWEnchCalc.Calculators.EssenceCalc;
 using Microsoft.EntityFrameworkCore;
 using HWEnchCalc.Titan;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
@@ -12,8 +12,8 @@ namespace HWEnchCalc.DB
     public class DbOperator : DbContext
     {
         private readonly string _dbConnectionString;
-        public DbSet<TitanBaseStats> TitanBaseStatsData { get; set; }
-        public DbSet<EssenceCalcInfo> EssenceCalcData { get; set; }
+        public DbSet<TitanStats> TitanBaseStatsData { get; set; }
+        public DbSet<EssenceCalcResult> EssenceCalcData { get; set; }
         public DbSet<ArtefactInfo> ArtefactInfos { get; set; }
 
         public DbOperator(string dbConnectionString)
@@ -40,18 +40,18 @@ namespace HWEnchCalc.DB
             v => v.ToString(),
             v => (ArtefactType)Enum.Parse(typeof(ArtefactType), v));
 
-            modelBuilder.Entity<EssenceCalcInfo>()
-                .HasOne(c => c.AtackArt);
-            modelBuilder.Entity<EssenceCalcInfo>()
+            modelBuilder.Entity<EssenceCalcResult>()
+                .HasOne(c => c.AttackArt);
+            modelBuilder.Entity<EssenceCalcResult>()
                 .HasOne(c => c.DefArt);
-            modelBuilder.Entity<EssenceCalcInfo>()
+            modelBuilder.Entity<EssenceCalcResult>()
                 .HasOne(c => c.TitanBaseStats);
         }
 
-        public void AddEssenceCalcInfo(EssenceCalcInfo calcInfo)
+        public void AddEssenceCalcInfo(EssenceCalcResult calcInfo)
         {
             calcInfo.Id = new int();
-            calcInfo.AtackArt.Id = new int();
+            calcInfo.AttackArt.Id = new int();
             calcInfo.DefArt.Id = new int();
             calcInfo.TitanBaseStats.Id = new int();
             EssenceCalcData.Add(calcInfo);
@@ -60,7 +60,7 @@ namespace HWEnchCalc.DB
 
         public void DeleteEssenceCalcInfoById(int id)
         {
-            EssenceCalcData.Remove(EssenceCalcData.First(c => c.Id == id));
+            EssenceCalcData.Remove(EssenceCalcData.Find(id));
             SaveChanges();
         }
 
@@ -69,24 +69,24 @@ namespace HWEnchCalc.DB
             Database.EnsureCreated();
         }
 
-        public List<EssenceCalcInfo> GetEssenceCalcData()
+        public List<EssenceCalcResult> GetEssenceCalcData()
         {
             return EssenceCalcData?
-                .Include(d => d.AtackArt)
+                .Include(d => d.AttackArt)
                 .Include(d => d.DefArt)
                 .Include(d => d.TitanBaseStats)
                 .ToList();
         }
 
-        public ObservableCollection<EssenceCalcShortInfo> GetShortCalcInfos()
+        public ObservableCollection<EssenceCalcResultShort> GetShortCalcInfos()
         {
             var calcData = EssenceCalcData
-                .Include(d => d.AtackArt)
+                .Include(d => d.AttackArt)
                 .Include(d => d.DefArt)
                 .Include(d => d.TitanBaseStats)
                 .Select(c => c.ToShortInfo());
 
-            return new ObservableCollection<EssenceCalcShortInfo>(calcData);
+            return new ObservableCollection<EssenceCalcResultShort>(calcData);
         }
     }
 }

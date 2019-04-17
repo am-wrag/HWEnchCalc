@@ -3,7 +3,7 @@ using HWEnchCalc.Common;
 
 namespace HWEnchCalc.Config
 {
-    public static class ConfigurationHelper
+    public static class ConfigurationManager
     {
         private const string DefaultConfigFileName = "appsettings.json";
 

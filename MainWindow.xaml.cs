@@ -1,12 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
 using HWEnchCalc.Config;
 using HWEnchCalc.Core;
 using HWEnchCalc.Titan;
-using MahApps.Metro.Controls;
-using MahApps.Metro.Controls.Dialogs;
 
 namespace HWEnchCalc
 {
@@ -17,7 +13,7 @@ namespace HWEnchCalc
         {
             InitializeComponent();
 
-            var config = ConfigurationHelper.GetConfig();
+            var config = ConfigurationManager.GetConfig();
             DataContext = new HwEnchCalcViewModel(config);
         }
 

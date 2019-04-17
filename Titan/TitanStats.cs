@@ -6,11 +6,11 @@ using HWEnchCalc.Common;
 
 namespace HWEnchCalc.Titan
 {
-    public class TitanBaseStats : NotifyPropertyChangedBase
+    public class TitanStats : NotifyPropertyChangedBase
     {
         [Key] public int Id { get; set; }
-        [NotMapped]public List<string> TitanVariants => TitanHelper.TitanNames;
-        [NotMapped]public List<int> LevelVariants => TitanHelper.LevelVariants;
+        [NotMapped] public List<string> TitanVariants => TitanHelper.TitanNames;
+        [NotMapped] public List<int> LevelVariants => TitanHelper.LevelVariants;
         [NotMapped] public BitmapImage TitanFaceImg { get; set; }
         [NotMapped] public BitmapImage TitanBorderImg { get; set; }
 
@@ -22,8 +22,10 @@ namespace HWEnchCalc.Titan
                 _titanName = value;
                 UpdateTitanImage();
                 UpdateTitanStats();
+                PropertyChangedByMember();
             }
         }
+
         public int Level
         {
             get => _level;
@@ -31,6 +33,7 @@ namespace HWEnchCalc.Titan
             {
                 _level = value;
                 UpdateTitanStats();
+                PropertyChangedByMember();
             }
         }
 
@@ -41,21 +44,20 @@ namespace HWEnchCalc.Titan
             {
                 _starCount = value;
                 UpdateTitanStats();
+                PropertyChangedByMember();
             }
         }
 
         private void UpdateTitanStats()
         {
-            
-
         }
 
-        public int Atack
+        public int Attack
         {
-            get => _atack;
+            get => _attack;
             set
             {
-                _atack = value;
+                _attack = value;
                 PropertyChangedByMember();
             }
         }
@@ -70,15 +72,14 @@ namespace HWEnchCalc.Titan
             }
         }
 
-        private int _atack;
+        private int _attack;
         private int _hp;
         private string _titanName;
         private int _starCount = 1;
         private int _level = 1;
 
-        public TitanBaseStats()
+        public TitanStats()
         {
-            
         }
 
         public void UpdateTitanImage()
@@ -89,5 +90,13 @@ namespace HWEnchCalc.Titan
             PropertyChangedByName(nameof(TitanBorderImg));
         }
 
+        public void Update(TitanStats stats)
+        {
+            TitanName = stats.TitanName;
+            Level = stats.Level;
+            StarCount = stats.StarCount;
+            Attack = stats.Attack;
+            Hp = stats.Hp;
+        }
     }
 }

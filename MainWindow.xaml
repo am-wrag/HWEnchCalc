@@ -6,7 +6,7 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:starPanelControl="clr-namespace:HWEnchCalc.StarPanelControl"
                  mc:Ignorable="d"
-                 Title="Калькулятор эффективности прокачки" Height="561.909" Width="704.773"
+                 Title="Калькулятор эффективности прокачки" Height="597.909" Width="704.773"
                  BorderThickness="0"
                  GlowBrush="Black"
                  ResizeMode="NoResize"
@@ -40,13 +40,6 @@
             <Setter Property="Height" Value="23" />
             <Setter Property="Width" Value="90" />
         </Style>
-        <Style x:Key="BaseBtn" TargetType="Button">
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="VerticalAlignment" Value="Top" />
-            <Setter Property="HorizontalAlignment" Value="Left" />
-            <Setter Property="Height" Value="23" />
-            <Setter Property="Width" Value="104" />
-        </Style>
         <Style x:Key="DefaultCb" TargetType="ComboBox" BasedOn="{StaticResource MetroComboBox}">
             <Setter Property="VerticalAlignment" Value="Top" />
             <Setter Property="HorizontalAlignment" Value="Left" />
@@ -59,9 +52,12 @@
             <Setter Property="Width" Value="112" />
             <Setter Property="FontSize" Value="14" />
         </Style>
-        <Style x:Key="BaseSquareBtn" TargetType="Button" BasedOn="{StaticResource BaseBtn}">
-            <Setter Property="Height" Value="51" />
-            <Setter Property="Width" Value="75" />
+        <Style x:Key="CommandBtn" TargetType="Button" BasedOn="{StaticResource MetroButton}">
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="VerticalAlignment" Value="Top" />
+            <Setter Property="HorizontalAlignment" Value="Left" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="Width" Value="100" />
         </Style>
     </Window.Resources>
     <Grid DataContext="{Binding}" Background="#FF7DC5E0">
@@ -75,7 +71,7 @@
                                   HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="99" />
                     </GroupBox>
                     <GroupBox Header="Атака" Style="{StaticResource BaseGrBox}">
-                        <TextBox Text="{Binding TitanBaseStats.Atack, UpdateSourceTrigger=PropertyChanged}"
+                        <TextBox Text="{Binding TitanBaseStats.Attack, UpdateSourceTrigger=PropertyChanged}"
                                  Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                     </GroupBox>
                     <GroupBox Header="ХП" Style="{StaticResource BaseGrBox}">
@@ -85,7 +81,7 @@
                     <GroupBox Header="Уровень" Style="{StaticResource BaseGrBox}" Width="119">
                         <ComboBox SelectedValue="{Binding TitanBaseStats.Level}"
                                   ItemsSource="{Binding TitanBaseStats.LevelVariants}"
-                                 Style="{StaticResource DefaultCb}" Margin="4,10,0,0" />
+                                  Style="{StaticResource DefaultCb}" Margin="4,10,0,0" />
                     </GroupBox>
                     <Grid Margin="0,6,0,10" Width="92">
                         <Image Source="{Binding TitanBaseStats.TitanFaceImg}" Margin="22,0,16,0" />
@@ -106,7 +102,7 @@
                                         HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Height="22" />
         </Grid>
         <mah:FlipView x:Name="FlipView" Margin="10,129,10,0" VerticalAlignment="Top"
-                      Height="397" SelectedIndex="{Binding CalcManager.CurenCalculatorIndex}"
+                      Height="430" SelectedIndex="{Binding CalcManager.CurenCalculatorIndex}"
                       Foreground="{x:Null}" BannerText="{Binding CalcManager.CalcBannerText}"
                       BorderBrush="White" BorderThickness="2" MouseHoverBorderBrush="{x:Null}" Background="White">
             <Grid Margin="0,3,0,-3">
@@ -125,30 +121,33 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
                         <GroupBox Header="Уровни" Style="{StaticResource BaseGrBox}">
                             <ComboBox
-                                SelectedValue="{Binding TitanEssenceCalc.CurrentCalcInfo.AtackArt.LevelInfo}"
+                                SelectedValue="{Binding TitanEssenceCalc.ResultManager.Result.AttackArt.LevelUpInfo}"
                                 ItemsSource="{Binding TitanEssenceCalc.FirstArtLevelUpVariants}"
                                 Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
                         </GroupBox>
                         <GroupBox Header="Изначально" Style="{StaticResource BaseGrBox}">
-                            <TextBox Text="{Binding TitanEssenceCalc.CurrentCalcInfo.AtackArt.BaseStatValue, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.AttackArt.StatValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="Увеличение" Style="{StaticResource BaseGrBox}">
-                            <TextBox Text="{Binding TitanEssenceCalc.CurrentCalcInfo.AtackArt.IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.AttackArt.IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="Эссенций" Style="{StaticResource BaseGrBox}">
-                            <TextBox Text="{Binding TitanEssenceCalc.CurrentCalcInfo.AtackArt.EssenceValue, UpdateSourceTrigger=PropertyChanged}"
+                            <TextBox
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.AttackArt.EssenceValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                     </StackPanel>
                 </GroupBox>
                 <GroupBox Header="Лог вычислений" HorizontalAlignment="Left"
                           Margin="7,6,0,0" Width="173" Grid.Column="1" Grid.Row="0"
-                          Grid.RowSpan="3" Height="333" VerticalAlignment="Top">
-                    <DataGrid x:Name="Dg1" ItemsSource="{Binding TitanEssenceCalc.EssenceCalcTable}" IsReadOnly="True"
-                              SelectedIndex="{Binding TitanEssenceCalc.SelectedTableIndex}"
-                              AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+                          Grid.RowSpan="3" Height="257" VerticalAlignment="Top">
+                    <DataGrid ItemsSource="{Binding TitanEssenceCalc.ResultManager.Results}" 
+                              SelectedIndex="{Binding TitanEssenceCalc.ResultManager.SelectedTableIndex}"
+                              IsReadOnly="True" AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
                               Margin="0,0,1,5" />
                 </GroupBox>
                 <GroupBox Header="Повышение артефакта защиты" HorizontalAlignment="Left" Height="107"
@@ -156,70 +155,92 @@
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
                         <GroupBox Header="Уровни" Style="{StaticResource BaseGrBox}">
                             <ComboBox
-                                SelectedValue="{Binding TitanEssenceCalc.CurrentCalcInfo.DefArt.LevelInfo}"
+                                SelectedValue="{Binding TitanEssenceCalc.ResultManager.Result.DefArt.LevelUpInfo}"
                                 ItemsSource="{Binding TitanEssenceCalc.SecondArtLevelUpVariants}"
-                                 Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
+                                Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
                         </GroupBox>
                         <GroupBox Header="Изначально" Style="{StaticResource BaseGrBox}">
                             <TextBox
-                                Text="{Binding TitanEssenceCalc.CurrentCalcInfo.DefArt.BaseStatValue, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.DefArt.StatValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="Увеличение" Style="{StaticResource BaseGrBox}">
                             <TextBox
-                                Text="{Binding TitanEssenceCalc.CurrentCalcInfo.DefArt.IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.DefArt.IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="Эссенций" Style="{StaticResource BaseGrBox}">
                             <TextBox
-                                Text="{Binding TitanEssenceCalc.CurrentCalcInfo.DefArt.EssenceValue, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding TitanEssenceCalc.ResultManager.Result.DefArt.EssenceValue, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource BaseTextBox}" Margin="4,10,0,0" />
                         </GroupBox>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox HorizontalAlignment="Left" Height="107"
+                <GroupBox HorizontalAlignment="Left" Height="126"
                           Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="2" Grid.Column="0"
                           Background="#CC2E630A" BorderBrush="#CC2E630A">
                     <GroupBox.Header>
-                        <TextBlock Text="{Binding TitanEssenceCalc.ResultDesc}" />
+                        <TextBlock Text="{Binding TitanEssenceCalc.ResultDesc}" FontWeight="Bold" Foreground="White" />
                     </GroupBox.Header>
                     <Grid Margin="0,0,0,-1" Background="White">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="195.5" />
+                            <ColumnDefinition Width="272" />
+                            <ColumnDefinition Width="181" />
                         </Grid.ColumnDefinitions>
-                        <Button Content="Записать"
-                                IsEnabled="{Binding TitanEssenceCalc.HasAddNewTitanToCalc}"
-                                Command="{Binding TitanEssenceCalc.AddNewEntryCommand}"
-                                HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                                Width="70" Height="50" />
-                        <Button Content="Удалить"
-                                Command="{Binding TitanEssenceCalc.DeleteEntryCommand}"
-                                HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                                Width="70" Height="50" Grid.Column="2" />
-                        <Button Content="Очистить"
-                                Command="{Binding TitanEssenceCalc.ClearCommand}"
-                                HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top"
-                                Width="70" Height="50" Grid.Column="1" />
-                        <GroupBox Style="{StaticResource BaseGrBox}" Header="Результат" Margin="48,-1,25,0"
-                                  Width="Auto" BorderBrush="#FF104463" Grid.Column="3"
-                                  HorizontalAlignment="Stretch">
+                        <GroupBox Style="{StaticResource BaseGrBox}" Header="Итог" Margin="0,5,24,0"
+                                  Width="127" BorderBrush="#FF104463" Grid.Column="4"
+                                  HorizontalAlignment="Right">
                             <TextBox Text="{Binding TitanEssenceCalc.Result, Mode=OneWay}" Margin="4,10,0,0"
                                      Style="{StaticResource BaseTextBox}" IsReadOnly="True"
                                      Background="#FFB64B41" Width="105" Foreground="White" FontWeight="Bold"
                                      BorderBrush="Black" />
                         </GroupBox>
+                        <Grid Grid.ColumnSpan="4" Grid.Column="0">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" MinHeight="41" />
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Label Content="Увеличение урона:" HorizontalAlignment="Left" Margin="5,7,0,0"
+                                   VerticalAlignment="Top" Height="31" Width="151" />
+                            <Label Content="Увеличение ЭХП:" HorizontalAlignment="Left" Margin="5,10,0,0"
+                                   VerticalAlignment="Top" Grid.Row="1" Height="31" Width="140" />
+                            <TextBox Grid.Row="0" Text="{Binding TitanEssenceCalc.AtackIncreaseEffective, Mode=OneWay}" Margin="158,10,0,0"
+                                     Style="{StaticResource BaseTextBox}" IsReadOnly="True"
+                                     Background="#FFD47D75" Width="105" Foreground="White" FontWeight="Bold"
+                                     BorderBrush="Black" Height="26" />
+                            <TextBox Text="{Binding TitanEssenceCalc.HpIncreaseEffective, Mode=OneWay}" Margin="158,10,0,0"
+                                     Style="{StaticResource BaseTextBox}" IsReadOnly="True"
+                                     Background="#FFD47D75" Width="105" Foreground="White" FontWeight="Bold"
+                                     BorderBrush="Black" Grid.Row="1" Height="26" />
+                        </Grid>
                     </Grid>
                 </GroupBox>
 
                 <starPanelControl:StarPanel Grid.Row="0" Grid.Column="0" Margin="355,7,0,0"
-                                            StarCount="{Binding TitanEssenceCalc.CurrentCalcInfo.AtackArt.StarCount, Mode=TwoWay}"
+                                            StarCount="{Binding TitanEssenceCalc.ResultManager.Result.AttackArt.StarCount, Mode=TwoWay}"
                                             HorizontalAlignment="Left" Width="109" Height="22" VerticalAlignment="Top" />
                 <starPanelControl:StarPanel Grid.Row="1" Grid.Column="0" Margin="355,7,0,0"
-                                            StarCount="{Binding TitanEssenceCalc.CurrentCalcInfo.DefArt.StarCount, Mode=TwoWay}"
+                                            StarCount="{Binding TitanEssenceCalc.ResultManager.Result.DefArt.StarCount, Mode=TwoWay}"
                                             HorizontalAlignment="Left" Width="109" Height="22" VerticalAlignment="Top" />
+                <Button Content="Удалить"
+                        Command="{Binding TitanEssenceCalc.ResultManager.DeleteEntryCommand}"
+                        Style="{StaticResource CommandBtn}"
+                        Margin="10,75,0,0" Grid.Column="1" Grid.Row="2" Width="163" />
+                <Button Content="Очистить"
+                        Style="{StaticResource CommandBtn}"
+                        Command="{Binding TitanEssenceCalc.ResultManager.ClearCommand}"
+                        Margin="10,44,0,0" Grid.Column="1" Grid.Row="2" Width="163" />
+                <Button Content="Записать"
+                        IsEnabled="{Binding TitanEssenceCalc.ResultManager.HasAddNewTitanToCalc}"
+                        Command="{Binding TitanEssenceCalc.ResultManager.AddNewEntryCommand}"
+                        Style="{StaticResource CommandBtn}"
+                        Margin="10,105,0,0" Grid.Column="1" Grid.Row="2" Width="163" />
             </Grid>
             <Grid />
             <Grid />

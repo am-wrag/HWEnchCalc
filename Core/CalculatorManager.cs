@@ -5,6 +5,10 @@ namespace HWEnchCalc.Core
 {
     public class CalculatorManager : NotifyPropertyChangedBase
     {
+        /// <summary>
+        /// Метка того что изменение свойства затрагивают основной калькулятор в подписках
+        /// </summary>
+        public static readonly string PropertyWhenModifyNeedCalculate = "PropertyWhenModifyNeedCalculate";
         private const string EssenceCalcDesc = "Вычисление эффективности прокачки 1го или 2го артефакта титанов";
         private const string GoldCalcDest = "Вычисление эффективности прокачки титана по отношению к прокачке 3го артефакта!";
         private const int MaxCalculatorIndex = 1;
