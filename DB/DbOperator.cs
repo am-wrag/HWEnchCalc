@@ -1,20 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using HWEnchCalc.Calculators.EssenceCalc;
-using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
+using HWEnchCalc.Calculators.TitanCalc;
 using HWEnchCalc.Titan;
-using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.EntityFrameworkCore;
 
 namespace HWEnchCalc.DB
 {
     public class DbOperator : DbContext
     {
         private readonly string _dbConnectionString;
-        public DbSet<TitanStats> TitanBaseStatsData { get; set; }
-        public DbSet<EssenceCalcResult> EssenceCalcData { get; set; }
-        public DbSet<ArtefactInfo> ArtefactInfos { get; set; }
+        public DbSet<TitanInfoDbo> TitanInfos { get; set; }
+        public DbSet<TitatnArtefactInfoDbo> ArtefactInfos { get; set; }
 
         public DbOperator(string dbConnectionString)
         {
@@ -30,37 +28,36 @@ namespace HWEnchCalc.DB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //можно использовать встроенный конвертер, но то что ниже - более наглядно
-            var converter = new EnumToStringConverter<ArtefactType>();
+            //var converter = new EnumToStringConverter<ArtefactType>();
 
-            modelBuilder
-                .Entity<ArtefactInfo>()
-                .Property(e => e.ArtefactType)
-                .HasConversion(
-            v => v.ToString(),
-            v => (ArtefactType)Enum.Parse(typeof(ArtefactType), v));
-
-            modelBuilder.Entity<EssenceCalcResult>()
-                .HasOne(c => c.AttackArt);
-            modelBuilder.Entity<EssenceCalcResult>()
-                .HasOne(c => c.DefArt);
-            modelBuilder.Entity<EssenceCalcResult>()
-                .HasOne(c => c.TitanBaseStats);
+            modelBuilder.Entity<TitanInfoDbo>()
+                .HasOne(c => c.FirstArtefact);
+            modelBuilder.Entity<TitanInfoDbo>()
+                .HasOne(c => c.SecondArtefact);
+            modelBuilder.Entity<TitanInfoDbo>()
+                .HasOne(c => c.SealArtefact);
         }
 
-        public void AddEssenceCalcInfo(EssenceCalcResult calcInfo)
+        public Task AddEssenceCalcInfoAsync(TitanInfo calcInfo)
         {
-            calcInfo.Id = new int();
-            calcInfo.AttackArt.Id = new int();
-            calcInfo.DefArt.Id = new int();
-            calcInfo.TitanBaseStats.Id = new int();
-            EssenceCalcData.Add(calcInfo);
+            return Task.Factory.StartNew(() => AddEssenceCalcInfo(calcInfo));
+        }
+
+        public void AddEssenceCalcInfo(TitanInfo calcInfo)
+        {
+            var titanInfo = new TitanInfoBuilder().GeTitanInfoDbo(calcInfo);
+            TitanInfos.Add(titanInfo);
             SaveChanges();
+        }
+
+        public Task DeleteEssenceCalcInfoByIdAsync(int id)
+        {
+            return Task.Factory.StartNew(() => DeleteEssenceCalcInfoById(id));
         }
 
         public void DeleteEssenceCalcInfoById(int id)
         {
-            EssenceCalcData.Remove(EssenceCalcData.Find(id));
+            TitanInfos.Remove(TitanInfos.Find(id));
             SaveChanges();
         }
 
@@ -69,24 +66,29 @@ namespace HWEnchCalc.DB
             Database.EnsureCreated();
         }
 
-        public List<EssenceCalcResult> GetEssenceCalcData()
+        public Task<List<TitanInfoDbo>> GetTitanCalculatedInfoAsync()
         {
-            return EssenceCalcData?
-                .Include(d => d.AttackArt)
-                .Include(d => d.DefArt)
-                .Include(d => d.TitanBaseStats)
+            return Task.Factory.StartNew(GetTitanCalculatedInfo);
+        }
+
+        public List<TitanInfoDbo> GetTitanCalculatedInfo()
+        {
+            return TitanInfos?
+                .Include(d => d.FirstArtefact)
+                .Include(d => d.SecondArtefact)
+                .Include(d => d.SealArtefact)
                 .ToList();
         }
 
-        public ObservableCollection<EssenceCalcResultShort> GetShortCalcInfos()
+        public Task<ObservableCollection<TitanShortInfo>> GetShortCalcInfosAsync()
         {
-            var calcData = EssenceCalcData
-                .Include(d => d.AttackArt)
-                .Include(d => d.DefArt)
-                .Include(d => d.TitanBaseStats)
-                .Select(c => c.ToShortInfo());
+            return Task.Factory.StartNew(GetShortCalcInfos);
+        }
 
-            return new ObservableCollection<EssenceCalcResultShort>(calcData);
+        public ObservableCollection<TitanShortInfo> GetShortCalcInfos()
+        {
+            var result = TitanInfos.Select(t => new TitanShortInfo(t.Name, t.Id, t.Ticks));
+            return new ObservableCollection<TitanShortInfo>(result);
         }
     }
 }

@@ -1,9 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Windows.Documents;
-
-namespace HWEnchCalc.Common
+﻿namespace HWEnchCalc.Titan.TitanArtefactData
 {
-    public class TitanArtLevelUp
+    public class TitanArtLevelUpInfo
     {
         public string LevelInfo { get; }
         /// <summary>
@@ -13,24 +10,24 @@ namespace HWEnchCalc.Common
         /// <summary>
         /// Цена в эссенциях для повышение уровня с текущего на +1
         /// </summary>
-        public int EssenceValue { get; }
+        public int LvlUpCostValue { get; }
 
         /// <summary>
         /// На сколько изменится стат если увеличить ему уровень с текущего на +1
         /// </summary>
         public int IncreaseStatValue { get; }
 
-        public TitanArtLevelUp(string levelInfo, int statValue, int essenceValue, int increaseStatValue)
+        public TitanArtLevelUpInfo(string levelInfo, int statValue, int lvlUpCostValue, int increaseStatValue)
         {
             LevelInfo = levelInfo;
             StatValue = statValue;
-            EssenceValue = essenceValue;
+            LvlUpCostValue = lvlUpCostValue;
             IncreaseStatValue = increaseStatValue;
         }
 
-        public static TitanArtLevelUp Empty()
+        public static TitanArtLevelUpInfo Empty()
         {
-            return new TitanArtLevelUp(string.Empty, new int(), new int(), new int());
+            return new TitanArtLevelUpInfo(string.Empty, new int(), new int(), new int());
         }
     }
 }

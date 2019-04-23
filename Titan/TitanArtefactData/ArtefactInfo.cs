@@ -1,12 +1,16 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
 using HWEnchCalc.Common;
+using HWEnchCalc.DB;
 
-namespace HWEnchCalc.Titan
+namespace HWEnchCalc.Titan.TitanArtefactData
 {
     public class ArtefactInfo : NotifyPropertyChangedBase
     {
-        [Key] public int Id { get; set; } = new  int();
-        public string LevelUpInfo
+        public List<string> LevelVariants { get; }
+
+        public ArtefactType ArtefactType { get; private set; }
+
+        public string LevelInfo
         {
             get => _levelInfo;
             set
@@ -54,7 +58,7 @@ namespace HWEnchCalc.Titan
         /// <summary>
         /// Количество эссенций нужное для повышения уровня
         /// </summary>
-        public double EssenceValue
+        public double LevelUpCost
         {
             get => _essenceValue;
             set
@@ -64,45 +68,47 @@ namespace HWEnchCalc.Titan
             }
         }
 
-        public ArtefactType ArtefactType { get; set; }
-
+        private readonly TitanSourceDataHelper _titanHelper;
         private double _baseStatValue;
         private double _increaseStatValue;
         private double _essenceValue;
         private string _levelInfo;
         private int _starCount = 1;
         private double _starRaito = 1;
-
-        public ArtefactInfo()
+       
+        public ArtefactInfo(ArtefactType artefactType, TitanSourceDataHelper titanHelper)
         {
+            ArtefactType = artefactType;
+            _titanHelper = titanHelper;
+            LevelVariants = titanHelper.GetArtLvlUpVariants(ArtefactType.ElementalOffence);
         }
 
         private void SetArtefactParametersByLevelTable()
         {
-            var artLvlUp = SourceArtLevelUpInfo.GetArtefactLevelUpInfo(_levelInfo, ArtefactType);
+            var artLvlUp = _titanHelper.GetTitanArtLevelUpInfo(LevelInfo, ArtefactType);
             StatValue = artLvlUp.StatValue;
-            EssenceValue = artLvlUp.EssenceValue;
+            LevelUpCost = artLvlUp.LvlUpCostValue;
             IncreaseStatValue = artLvlUp.IncreaseStatValue;
             PropertyChangedByName(nameof(StatValue));
-            PropertyChangedByName(nameof(EssenceValue));
+            PropertyChangedByName(nameof(LevelUpCost));
             PropertyChangedByName(nameof(IncreaseStatValue));
         }
 
         private void UpdateStatsByStarCount()
         {
-            _starRaito = TitanHelper.GetArtefactStarRaito(ArtefactType, StarCount);
+            _starRaito = _titanHelper.GetArtefactStarRaito(ArtefactType, StarCount);
             PropertyChangedByName(nameof(StatValue));
             PropertyChangedByName(nameof(IncreaseStatValue));
         }
 
-        public void Update(ArtefactInfo artInfo)
+        public void Update(TitatnArtefactInfoDbo artInfo)
         {
-            LevelUpInfo = artInfo.LevelUpInfo;
+            ArtefactType = artInfo.ArtefactType;
+            LevelInfo = artInfo.LevelInfo;
             StarCount = artInfo.StarCount;
             StatValue = artInfo.StatValue;
             IncreaseStatValue = artInfo.IncreaseStatValue;
-            EssenceValue = artInfo.EssenceValue;
-            ArtefactType = artInfo.ArtefactType;
+            LevelUpCost = artInfo.LevelUpCost;
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using HWEnchCalc.Common;
 
-namespace HWEnchCalc.Core
+namespace HWEnchCalc.Calculators
 {
     public class CalculatorManager : NotifyPropertyChangedBase
     {
@@ -15,7 +15,7 @@ namespace HWEnchCalc.Core
 
         public string CalcBannerText => _currenCalculatorIndex == 0 ? EssenceCalcDesc: GoldCalcDest;
 
-        public int CurenCalculatorIndex
+        public int CurrentCalculatorIndex
         {
             get => _currenCalculatorIndex;
             set
@@ -44,18 +44,18 @@ namespace HWEnchCalc.Core
 
         private void SetNextCalulator()
         {
-            if (CurenCalculatorIndex + 1 > MaxCalculatorIndex) return;
+            if (CurrentCalculatorIndex + 1 > MaxCalculatorIndex) return;
 
-            CurenCalculatorIndex++;
+            CurrentCalculatorIndex++;
 
             UpdateVisibility();
         }
 
         private void SetPreviosCalulator()
         {
-            if (CurenCalculatorIndex - 1 < 0) return;
+            if (CurrentCalculatorIndex - 1 < 0) return;
 
-            CurenCalculatorIndex--;
+            CurrentCalculatorIndex--;
 
             UpdateVisibility();
         }

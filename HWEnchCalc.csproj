@@ -176,8 +176,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Calculators\EssenceCalc\EssCalcResultManager.cs" />
-    <Compile Include="Titan\TitanHelper.cs" />
+    <Compile Include="Calculators\TitanCalc\TitanCalculationDataManager.cs" />
+    <Compile Include="Config\GameInfo.cs" />
+    <Compile Include="Config\TitanData.cs" />
+    <Compile Include="DB\TitanInfoBuilder.cs" />
+    <Compile Include="DB\TitatnArtefactInfoDbo.cs" />
+    <Compile Include="DB\TitanInfoDbo.cs" />
+    <Compile Include="Titan\TitanArtefactData\TitanArtSourceInfo.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -192,26 +197,25 @@
       <DependentUpon>StarPanel.xaml</DependentUpon>
     </Compile>
     <Compile Include="StarPanelControl\StarPanelViewModel.cs" />
-    <Compile Include="Titan\TitanArtLevel.cs" />
-    <Compile Include="Titan\SourceArtLevelUpInfo.cs" />
+    <Compile Include="Titan\TitanArtefactData\TitanArtLevelUpInfo.cs" />
     <Compile Include="Config\CalculatorInfo.cs" />
     <Compile Include="Config\Configuration.cs" />
     <Compile Include="Config\ConfigurationManager.cs" />
     <Compile Include="Config\ConnectionInfo.cs" />
     <Compile Include="Config\WindowProperties.cs" />
-    <Compile Include="Core\CalculatorManager.cs" />
-    <Compile Include="Titan\ArtefactType.cs" />
+    <Compile Include="Calculators\CalculatorManager.cs" />
+    <Compile Include="Titan\TitanArtefactData\ArtefactType.cs" />
     <Compile Include="Common\CulumnAttribute.cs" />
-    <Compile Include="Calculators\EssenceCalc\EssenceCalcResultShort.cs" />
+    <Compile Include="Calculators\TitanCalc\TitanShortInfo.cs" />
+    <Compile Include="Titan\TitanSourceDataHelper.cs" />
     <Compile Include="Titan\TitanSourceInfo.cs" />
-    <Compile Include="Titan\TitanStats.cs" />
+    <Compile Include="Titan\TitanStatPerStar.cs" />
+    <Compile Include="Titan\TitanInfo.cs" />
     <Compile Include="Common\WpfCommand.cs" />
-    <Compile Include="Calculators\TitanEssenceCalc.cs" />
-    <Compile Include="Calculators\TitanGoldCalc.cs" />
+    <Compile Include="Calculators\TitanCalculator.cs" />
     <Compile Include="DB\DbOperator.cs" />
     <Compile Include="Common\JsonParser.cs" />
-    <Compile Include="Titan\ArtefactInfo.cs" />
-    <Compile Include="Calculators\EssenceCalc\EssenceCalcResult.cs" />
+    <Compile Include="Titan\TitanArtefactData\ArtefactInfo.cs" />
     <Compile Include="Core\HwEnchCalcViewModel.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
