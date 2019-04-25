@@ -1,4 +1,4 @@
-﻿namespace HWEnchCalc.Titan.TitanArtefactData
+﻿namespace HWEnchCalc.Titan.ArtefactData
 {
     public enum ArtefactType
     {

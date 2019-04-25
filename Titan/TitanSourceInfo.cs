@@ -4,7 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
-using HWEnchCalc.Titan.TitanArtefactData;
+using HWEnchCalc.Titan.ArtefactData;
 
 namespace HWEnchCalc.Titan
 {
@@ -16,25 +16,12 @@ namespace HWEnchCalc.Titan
         public string FaceImage { get; set; }
         public string BorderImage { get; set; }
         public ArtefactType SealArtefact { get; set; }
+        public TotemType TotemType { get; set; }
 
         public List<TitanStatPerStar> StatsPerLevelPerStar = new List<TitanStatPerStar>();
 
         public int MinStarLevel => StatsPerLevelPerStar.Min(t => t.StarCount);
         public int MaxStarLevel => StatsPerLevelPerStar.Max(t => t.StarCount);
-
-        //взято из игровых формул
-        private const double TitalLevelPowСoefficient = 1.5;
-
-        public (double Hp, double Atack) GetHpAndAttack(int level, int starCount)
-        {
-            var levelModyfier = Math.Pow(level, TitalLevelPowСoefficient);
-            var statsPerStar = StatsPerLevelPerStar.Find(s => s.StarCount == starCount);
-
-            var hp = statsPerStar.Hp * levelModyfier + HpStart;
-            var atack = statsPerStar.Attack * levelModyfier + AttackStart;
-
-            return (Math.Round(hp, 1), Math.Round(atack, 1));
-        }
 
         public BitmapImage GetFaceImage()
         {

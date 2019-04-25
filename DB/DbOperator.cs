@@ -12,7 +12,8 @@ namespace HWEnchCalc.DB
     {
         private readonly string _dbConnectionString;
         public DbSet<TitanInfoDbo> TitanInfos { get; set; }
-        public DbSet<TitatnArtefactInfoDbo> ArtefactInfos { get; set; }
+        public DbSet<ElementArtInfoDbo> ElementalArtefactInfos { get; set; }
+        public DbSet<SealArtInfoDbo> SealArtefactInfos { get; set; }
 
         public DbOperator(string dbConnectionString)
         {

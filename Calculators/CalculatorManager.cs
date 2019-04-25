@@ -31,8 +31,8 @@ namespace HWEnchCalc.Calculators
         public Visibility PrevBtnVisibility => 
             _currenCalculatorIndex == 0 ? Visibility.Hidden : Visibility.Visible;
 
-        public WpfCommand NextCalcCommand { get; set; }
-        public WpfCommand PreviosCalcCommand { get; set; }
+        public WpfCommand NextCalcCommand { get; }
+        public WpfCommand PreviosCalcCommand { get; }
 
         private int _currenCalculatorIndex;
 

@@ -1,27 +1,52 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using HWEnchCalc.Calculators.TitanCalc;
 using HWEnchCalc.Common;
 using HWEnchCalc.Config;
 using HWEnchCalc.Titan;
+using HWEnchCalc.Titan.Helper;
+using MahApps.Metro.Controls.Dialogs;
+using Microsoft.EntityFrameworkCore.Metadata.Conventions.Internal;
 
 namespace HWEnchCalc.Calculators
 {
     public class TitanCalculator : NotifyPropertyChangedBase
     {
-        public double AtackIncreaseEffective { get; set; }
-        public double HpIncreaseEffective { get; set; }
+        public double AtackIncreaseEffective { get; private set; }
+        public double HpIncreaseEffective { get; private set; }
         public double Result { get; private set; }
-        public string ResultDesc { get; private set; } = "Результат";
-        public TitanCalculationDataManager CalcManager { get; set; }
+        public string ResultDesc { get; private set; } = "Результат:";
+        public TitanCalculationDataManager CalcManager { get; private set; }
        
-        private const string AtackBetterThenDefMessage = "Атака лучше защиты, результат в %";
-        private const string DefBetterThenAtackMessage = "Защита лучше атаки, результат в %";
+        private const string AtackBetterThenDefMessage = "Результат: атака лучше защиты";
+        private const string DefBetterThenAtackMessage = "Результат: защита лучше атаки";
 
         public TitanCalculator(Configuration config)
         {
-            CalcManager = new TitanCalculationDataManager(config);
+            ParseConfigAsync(config);
+        }
+
+        private async void ParseConfigAsync(Configuration config)
+        {
+            var awaitDialogController = await Global<ProgressDialogController>.GetAwaitDialog();
+            awaitDialogController.SetIndeterminate();
+            //awaitDialogController.SetProgress(0.9);
+
+            var titanHelper = await ParseTitanData(config);
+
+            CalcManager = new TitanCalculationDataManager(titanHelper, config);
             CalcManager.PropertyChanged += Calculate;
+
+            PropertyChangedByName(nameof(CalcManager));
+
+            await awaitDialogController.CloseAsync();
+        }
+
+        public async Task<TitanSourceDataHelper> ParseTitanData(Configuration config)
+        {
+            var titanHelper = new TitanSourceDataHelper();
+            return await Task.Factory.StartNew(() => titanHelper.Fill(config));
         }
 
         private void Calculate(object sender, PropertyChangedEventArgs args)

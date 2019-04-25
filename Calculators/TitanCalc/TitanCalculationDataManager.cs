@@ -8,6 +8,7 @@ using HWEnchCalc.Common;
 using HWEnchCalc.Config;
 using HWEnchCalc.DB;
 using HWEnchCalc.Titan;
+using HWEnchCalc.Titan.Helper;
 
 namespace HWEnchCalc.Calculators.TitanCalc
 { 
@@ -15,9 +16,10 @@ namespace HWEnchCalc.Calculators.TitanCalc
     {
         public List<string> TitanVariants => _titanHelper.GetTitanNames();
         public ObservableCollection<TitanShortInfo> CalculatedTitanList { get; private set; }
-        public WpfCommand AddNewEntryCommand { get; set; }
-        public WpfCommand DeleteEntryCommand { get; set; }
-        public WpfCommand ClearCommand { get; set; }
+        public WpfCommand AddNewEntryCommand { get; }
+        public WpfCommand DeleteEntryCommand { get; }
+        public WpfCommand ClearCommand { get; }
+        public bool IsDbLoading { get; private set; } = true;
 
         public bool HasAddNewTitanToCalc => TitanCalculator.CheckAllTitanStatsIsNoZero(TitanInfo);
         public int SelectedTableIndex
@@ -30,21 +32,21 @@ namespace HWEnchCalc.Calculators.TitanCalc
             }
         }
 
-        public TitanInfo TitanInfo { get; set; }
+        public TitanInfo TitanInfo { get; private set; }
 
         private readonly TitanSourceDataHelper _titanHelper;
         private readonly Configuration _config;
         private readonly DbOperator _dbOperator;
         private int _selectedTableIndex = -1;
 
-        public TitanCalculationDataManager(Configuration config)
+        public TitanCalculationDataManager(TitanSourceDataHelper titanHelper, Configuration config)
         {
             _config = config;
             _dbOperator= new DbOperator(config.ConnectionInfo.DefaultConnection);
 
-            _titanHelper = new TitanSourceDataHelper(config);
+            _titanHelper = titanHelper;
 
-            TitanInfo = new TitanInfo(_titanHelper, config.GameInfo.TitanDatas.MaxLevel);
+            TitanInfo = new TitanInfo(_titanHelper, config.GameInfo.TitanDatas.TitanMaxLevel);
             TitanInfo.PropertyChanged += NotifyToCalculation;
 
             AddNewEntryCommand = new WpfCommand(SaveNewCalcResult);
@@ -53,6 +55,7 @@ namespace HWEnchCalc.Calculators.TitanCalc
 
             GetPreviosCalcResult();
         }
+
         private async void SaveNewCalcResult()
         {
             if (!TitanCalculator.CheckAllTitanStatsIsNoZero(TitanInfo)) return;
@@ -65,13 +68,14 @@ namespace HWEnchCalc.Calculators.TitanCalc
         private async void GetPreviosCalcResult()
         {
             CalculatedTitanList = await _dbOperator.GetShortCalcInfosAsync();
-            await Task.Delay(TimeSpan.FromSeconds(5));
+            IsDbLoading = false;
+            PropertyChangedByName(nameof(IsDbLoading));
             PropertyChangedByName(nameof(CalculatedTitanList));
         }
 
         private void ClearCalcInfo()
         {
-            TitanInfo = new TitanInfo(_titanHelper, _config.GameInfo.TitanDatas.MaxLevel);
+            TitanInfo = new TitanInfo(_titanHelper, _config.GameInfo.TitanDatas.TitanMaxLevel);
             TitanInfo.PropertyChanged += NotifyToCalculation;
             PropertyChangedByName(nameof(TitanInfo));
         }

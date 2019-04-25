@@ -1,8 +1,8 @@
-﻿using HWEnchCalc.Titan.TitanArtefactData;
+﻿using HWEnchCalc.Titan.ArtefactData;
 
 namespace HWEnchCalc.DB
 {
-    public class TitatnArtefactInfoDbo
+    public class ElementArtInfoDbo
     {
         public int Id { get; set; }
         public ArtefactType ArtefactType { get; set; }

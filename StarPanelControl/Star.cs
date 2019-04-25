@@ -5,7 +5,9 @@ namespace HWEnchCalc.StarPanelControl
 {
     public class Star : NotifyPropertyChangedBase
     {
-        
+        private readonly int _visionRangeStart;
+        private readonly int _visionRangeEnd;
+
         public Visibility Visibility
         {
             get => _starVis;
@@ -17,18 +19,17 @@ namespace HWEnchCalc.StarPanelControl
         }
         private Visibility _starVis = Visibility.Hidden;
 
-        public Star()
+        public Star(int visionRangeStart, int visionRangeEnd)
         {
+            _visionRangeStart = visionRangeStart;
+            _visionRangeEnd = visionRangeEnd;
         }
 
-        public void Hide()
+        public void UpdateVision(int starCount)
         {
-            Visibility = Visibility.Hidden;
-        }
-
-        public void Show()
-        {
-            Visibility = Visibility.Visible;
+            Visibility = (starCount >= _visionRangeStart && starCount <= _visionRangeEnd)
+                ? Visibility.Visible
+                : Visibility.Hidden;
         }
     }
 }

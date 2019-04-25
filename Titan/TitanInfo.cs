@@ -3,18 +3,20 @@ using System.ComponentModel;
 using System.Windows.Media.Imaging;
 using HWEnchCalc.Common;
 using HWEnchCalc.DB;
-using HWEnchCalc.Titan.TitanArtefactData;
+using HWEnchCalc.Titan.ArtefactData;
+using HWEnchCalc.Titan.Helper;
 
 namespace HWEnchCalc.Titan
 {
     public class TitanInfo : NotifyPropertyChangedBase
     {
         public List<int> LevelVariants { get; set; } = new List<int>();
-        public BitmapImage TitanFaceImg { get; set; }
-        public BitmapImage TitanBorderImg { get; set; }
-        public ArtefactInfo FirstArt { get; set; }
-        public ArtefactInfo SecondArt { get; set; }
-        public ArtefactInfo SealArt { get; set; }
+        public List<int> TotemLevelVariants { get; set; } = new List<int>();
+        public BitmapImage FaceImage { get; set; }
+        public BitmapImage BorderImage { get; set; }
+        public ElementalArtInfo FirstArt { get; set; }
+        public ElementalArtInfo SecondArt { get; set; }
+        public SealArtInfo SealArt { get; set; }
 
         public string Name
         {
@@ -23,6 +25,7 @@ namespace HWEnchCalc.Titan
             {
                 _name = value;
                 UpdateTitanImage();
+                UpdateSealArtefact();
                 UpdateTitanStats();
                 PropertyChangedByMember();
             }
@@ -69,12 +72,34 @@ namespace HWEnchCalc.Titan
                 PropertyChangedByMember();
             }
         }
+        public int TotemLevel
+        {
+            get => _totemLevel;
+            set
+            {
+                _totemLevel = value;
+                UpdateTitanStats();
+                PropertyChangedByMember();
+            }
+        }
+        public int TotemStars
+        {
+            get => _totemStars;
+            set
+            {
+                _totemStars = value;
+                UpdateTitanStats();
+                PropertyChangedByMember();
+            }
+        }
 
         private TitanSourceInfo TitanSourceInfo => _titanHelper.GetTitanSourseInfo(_name);
         private readonly TitanSourceDataHelper _titanHelper;
         private double _attack;
         private double _hp;
         private string _name;
+        private int _totemLevel;
+        private int _totemStars = 1;
         private int _starCount = 1;
         private int _level = 1;
 
@@ -82,37 +107,37 @@ namespace HWEnchCalc.Titan
         {
             _titanHelper = titanHelper;
 
-            FirstArt = new ArtefactInfo(ArtefactType.ElementalOffence, titanHelper);
-            SecondArt = new ArtefactInfo(ArtefactType.ElementalDefence, _titanHelper);
-            SealArt = new ArtefactInfo(ArtefactType.None, titanHelper);
+            FirstArt = new ElementalArtInfo(ArtefactType.ElementalOffence, titanHelper);
+            SecondArt = new ElementalArtInfo(ArtefactType.ElementalDefence, _titanHelper);
+            SealArt = new SealArtInfo(ArtefactType.None, titanHelper);
 
             FirstArt.PropertyChanged += NotifyCalculator;
             SecondArt.PropertyChanged += NotifyCalculator;
-            SealArt.PropertyChanged += NotifyCalculator;
+            SealArt.PropertyChanged += UpdateStats;
 
-            for (var i = 1; i <= maxLevel; i++)
+            TotemLevelVariants.Add(0);//нулевой уровень = отсутствие тотема
+            for (var i = maxLevel; i > 0; i--)
             {
                 LevelVariants.Add(i);
+                TotemLevelVariants.Add(i);
             }
         }
-
-
-
+        
         public void UpdateTitanImage()
         {
             if (TitanSourceInfo == null)
             {
-                TitanFaceImg = new BitmapImage();
-                TitanBorderImg = new BitmapImage();
+                FaceImage = new BitmapImage();
+                BorderImage = new BitmapImage();
             }
             else
             {
-                TitanFaceImg = TitanSourceInfo.GetFaceImage();
-                TitanBorderImg = TitanSourceInfo.GetBorderImage();
+                FaceImage = TitanSourceInfo.GetFaceImage();
+                BorderImage = TitanSourceInfo.GetBorderImage();
             }
 
-            PropertyChangedByName(nameof(TitanFaceImg));
-            PropertyChangedByName(nameof(TitanBorderImg));
+            PropertyChangedByName(nameof(FaceImage));
+            PropertyChangedByName(nameof(BorderImage));
         }
 
         public void Update(TitanInfoDbo titanInfoDbo)
@@ -122,9 +147,22 @@ namespace HWEnchCalc.Titan
             StarCount = titanInfoDbo.StarCount;
             Attack = titanInfoDbo.Attack;
             Hp = titanInfoDbo.Hp;
-            FirstArt.Update(titanInfoDbo.FirstArtefact);
-            SecondArt.Update(titanInfoDbo.SecondArtefact);
-            SealArt.Update(titanInfoDbo.SealArtefact);
+            TotemLevel = titanInfoDbo.TotemLevel;
+            TotemStars = titanInfoDbo.TotemStars;
+            FirstArt.UpdateFromDbo(titanInfoDbo.FirstArtefact);
+            SecondArt.UpdateFromDbo(titanInfoDbo.SecondArtefact);
+            SealArt.UpdateFromDbo(titanInfoDbo.SealArtefact);
+        }
+
+        private void UpdateStats(object sender, PropertyChangedEventArgs e)
+        {
+            UpdateTitanStats();
+        }
+
+        private void UpdateSealArtefact()
+        {
+            SealArt.Update(TitanSourceInfo);
+            PropertyChangedByName(nameof(SealArt));
         }
 
         private void UpdateTitanStats()
@@ -141,9 +179,11 @@ namespace HWEnchCalc.Titan
                 StarCount = TitanSourceInfo.MinStarLevel;
             }
 
-            var (hp, atack) = TitanSourceInfo.GetHpAndAttack(Level, StarCount);
-            Hp = hp;
-            Attack = atack;
+            var (hp, attack) = _titanHelper.GetHpAndAttack(TitanSourceInfo, Level, StarCount);
+            var totemBonus = _titanHelper.TotemHelper.GetTotemHpAndAttackBonus(TitanSourceInfo.TotemType, TotemLevel, TotemStars);
+
+            Hp = hp + totemBonus.hp + SealArt.Hp;
+            Attack = attack + totemBonus.attack + SealArt.Attack;
         }
 
         private void NotifyCalculator(object sender, PropertyChangedEventArgs e)

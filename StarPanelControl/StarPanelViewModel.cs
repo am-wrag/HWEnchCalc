@@ -8,21 +8,12 @@ namespace HWEnchCalc.StarPanelControl
 {
     public class StarPanelViewModel : NotifyPropertyChangedBase
     {
-        public Star Star1 { get; set; } = new Star {Visibility = Visibility.Visible};
-        public Star Star2 { get; set; } = new Star();
-        public Star Star3 { get; set; } = new Star();
-        public Star Star4 { get; set; } = new Star();
-        public Star Star5 { get; set; } = new Star();
-
-        public int AbsStarWidth
-        {
-            get => _absStarWidth;
-            set
-            {
-                _absStarWidth = value;
-                PropertyChangedByMember();
-            }
-        }
+        public Star Star1 { get; set; } = new Star(5, 5);
+        public Star Star2 { get; set; } = new Star(3, 5);
+        public Star Star3 { get; set; } = new Star(1, 6) { Visibility = Visibility.Visible };
+        public Star Star4 { get; set; } = new Star(2, 5);
+        public Star Star5 { get; set; } = new Star(4, 5);
+      
         public WpfCommand ChangeStarCountCommand { get; set; }
         public BitmapImage AbsStarImage
         {
@@ -39,13 +30,20 @@ namespace HWEnchCalc.StarPanelControl
         public List<Star> Stars;
 
         private BitmapImage _absStarImage;
-        private int _absStarWidth;
 
         public StarPanelViewModel()
         {
-            Stars = new List<Star>{Star1, Star2, Star3, Star4, Star5};
+            Stars = new List<Star>{ Star1, Star2, Star3, Star4, Star5 };
             SetSimpleMiddleStar();
             ChangeStarCountCommand = new WpfCommand(ChangeStarCount); 
+        }
+
+        public void ShowStars(int starCount)
+        {
+            foreach (var star in Stars)
+            {
+                star.UpdateVision(starCount);
+            }
         }
 
         public void ChangeStarCount()
@@ -56,13 +54,10 @@ namespace HWEnchCalc.StarPanelControl
         public void SetSimpleMiddleStar()
         {
             AbsStarImage = new BitmapImage(new Uri("Images/SimplStar.png", UriKind.RelativeOrAbsolute));
-            AbsStarWidth = 25;
         }
         public void SetAbsMiddleStar()
         {
             AbsStarImage = new BitmapImage(new Uri("Images/AbsStar.png", UriKind.RelativeOrAbsolute));
-            AbsStarWidth = 40;
-            Star3.Show();
         }
     }
 }

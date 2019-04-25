@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
 using HWEnchCalc.Common;
 using HWEnchCalc.DB;
+using HWEnchCalc.Titan.Helper;
 
-namespace HWEnchCalc.Titan.TitanArtefactData
+namespace HWEnchCalc.Titan.ArtefactData
 {
-    public class ArtefactInfo : NotifyPropertyChangedBase
+    public class ElementalArtInfo : NotifyPropertyChangedBase
     {
         public List<string> LevelVariants { get; }
 
@@ -16,7 +17,7 @@ namespace HWEnchCalc.Titan.TitanArtefactData
             set
             {
                 _levelInfo = value;
-                SetArtefactParametersByLevelTable();
+                UpdateStats();
                 PropertyChangedByMember();
             }
         }
@@ -35,10 +36,10 @@ namespace HWEnchCalc.Titan.TitanArtefactData
         /// </summary>
         public double StatValue
         {
-            get => _baseStatValue * _starRaito;
+            get => _statValue;
             set
             {
-                _baseStatValue = value / _starRaito;
+                _statValue = value;
                 PropertyChangedByMember();
             }
         }
@@ -48,10 +49,10 @@ namespace HWEnchCalc.Titan.TitanArtefactData
         /// </summary>
         public double IncreaseStatValue
         {
-            get => _increaseStatValue * _starRaito;
+            get => _increaseStatValue;
             set
             {
-                _increaseStatValue = value / _starRaito;
+                _increaseStatValue = value;
                 PropertyChangedByMember();
             }
         }
@@ -68,40 +69,36 @@ namespace HWEnchCalc.Titan.TitanArtefactData
             }
         }
 
-        private readonly TitanSourceDataHelper _titanHelper;
-        private double _baseStatValue;
+        private readonly ElementalArtefactHelper _artefactHelper;
+        private double _statValue;
         private double _increaseStatValue;
         private double _essenceValue;
         private string _levelInfo;
         private int _starCount = 1;
         private double _starRaito = 1;
        
-        public ArtefactInfo(ArtefactType artefactType, TitanSourceDataHelper titanHelper)
+        public ElementalArtInfo(ArtefactType artefactType, TitanSourceDataHelper artefactHelper)
         {
             ArtefactType = artefactType;
-            _titanHelper = titanHelper;
-            LevelVariants = titanHelper.GetArtLvlUpVariants(ArtefactType.ElementalOffence);
+            _artefactHelper = artefactHelper.ElementArtefactHelper;
+            LevelVariants = _artefactHelper.GetArtLvlUpVariants(ArtefactType.ElementalOffence);
         }
 
-        private void SetArtefactParametersByLevelTable()
+        private void UpdateStats()
         {
-            var artLvlUp = _titanHelper.GetTitanArtLevelUpInfo(LevelInfo, ArtefactType);
-            StatValue = artLvlUp.StatValue;
+            var artLvlUp = _artefactHelper.GetElementArtLevelUpInfo(LevelInfo, ArtefactType);
             LevelUpCost = artLvlUp.LvlUpCostValue;
-            IncreaseStatValue = artLvlUp.IncreaseStatValue;
-            PropertyChangedByName(nameof(StatValue));
-            PropertyChangedByName(nameof(LevelUpCost));
-            PropertyChangedByName(nameof(IncreaseStatValue));
+            StatValue = artLvlUp.StatValue * _starRaito;
+            IncreaseStatValue = artLvlUp.IncreaseStatValue * _starRaito;
         }
 
         private void UpdateStatsByStarCount()
         {
-            _starRaito = _titanHelper.GetArtefactStarRaito(ArtefactType, StarCount);
-            PropertyChangedByName(nameof(StatValue));
-            PropertyChangedByName(nameof(IncreaseStatValue));
+            _starRaito = _artefactHelper.GetElementalArtRaito(StarCount);
+            UpdateStats();
         }
 
-        public void Update(TitatnArtefactInfoDbo artInfo)
+        public void UpdateFromDbo(ElementArtInfoDbo artInfo)
         {
             ArtefactType = artInfo.ArtefactType;
             LevelInfo = artInfo.LevelInfo;

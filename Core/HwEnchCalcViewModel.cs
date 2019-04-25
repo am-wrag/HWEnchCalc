@@ -13,6 +13,5 @@ namespace HWEnchCalc.Core
         {
             TitanCalc = new TitanCalculator(config);
         }
-        
     }
 }

@@ -6,7 +6,8 @@
                  xmlns:mah="http://metro.mahapps.com/winfx/xaml/controls"
                  xmlns:starPanelControl="clr-namespace:HWEnchCalc.StarPanelControl"
                  mc:Ignorable="d"
-                 Title="Калькулятор эффективности прокачки" Height="695.909" Width="720.773"
+                 Title="Калькулятор эффективности прокачки" Height="695.909" Width="733.273"
+                 TitleCharacterCasing="Normal"
                  BorderThickness="0"
                  GlowBrush="Black"
                  ResizeMode="NoResize"
@@ -52,9 +53,6 @@
             <Setter Property="Width" Value="112" />
             <Setter Property="FontSize" Value="14" />
         </Style>
-        <Style x:Key="LongGrBox" TargetType="GroupBox" BasedOn="{StaticResource BaseGrBox}">
-            <Setter Property="Width" Value="130" />
-        </Style>
         <Style x:Key="CommandBtn" TargetType="Button" BasedOn="{StaticResource MetroButton}">
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="VerticalAlignment" Value="Top" />
@@ -65,36 +63,52 @@
     </Window.Resources>
     <Grid DataContext="{Binding}" Background="#FF7DC5E0">
         <Grid Margin="10,6,10,0" Background="#FFF9F6F6" Height="125" VerticalAlignment="Top">
-            <GroupBox DataContext="{Binding TitanCalc.CalcManager}" Header="Базовые параметры титана" HorizontalAlignment="Left" Width="659" Background="#CC4E4E8D" Margin="15,10,0,0" Height="104" VerticalAlignment="Top">
-                <StackPanel  Orientation="Horizontal" Margin="3,-4,0,3" Background="White">
+            <GroupBox DataContext="{Binding TitanCalc.CalcManager}" Header="Базовые параметры титана"
+                      HorizontalAlignment="Left" Width="682" Background="#CC4E4E8D" Margin="15,10,0,0" Height="104"
+                      VerticalAlignment="Top">
+                <StackPanel Orientation="Horizontal" Margin="3,-4,0,3" Background="White">
                     <GroupBox Header="Имя" Style="{StaticResource BaseGrBox}">
                         <ComboBox ItemsSource="{Binding TitanVariants}"
                                   SelectedItem="{Binding TitanInfo.Name}"
-                                  HorizontalAlignment="Left" Margin="0,10,0,0" VerticalAlignment="Top" Width="99" />
+                                  Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
                     </GroupBox>
-                    <GroupBox Header="Уровень" Style="{StaticResource BaseGrBox}" Width="119">
+                    <GroupBox Header="Уровень" Style="{StaticResource BaseGrBox}">
                         <ComboBox SelectedValue="{Binding TitanInfo.Level}"
                                   ItemsSource="{Binding TitanInfo.LevelVariants}"
-                                  Style="{StaticResource DefaultCb}" Margin="4,10,0,0" />
+                                  Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
                     </GroupBox>
-                    <GroupBox Header="Атака за уровень" Style="{StaticResource LongGrBox}" Height="67" VerticalAlignment="Top">
+                    <GroupBox Header="Атака" Style="{StaticResource BaseGrBox}">
                         <TextBox Text="{Binding TitanInfo.Attack, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="14,10,14,0" Style="{StaticResource BaseTextBox}" HorizontalAlignment="Stretch" Width="Auto" />
+                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                     </GroupBox>
-                    <GroupBox Header="ХП за уровень" Style="{StaticResource LongGrBox}">
+                    <GroupBox Header="ХП" Style="{StaticResource BaseGrBox}">
                         <TextBox Text="{Binding TitanInfo.Hp, UpdateSourceTrigger=PropertyChanged}"
-                                 Margin="14,10,14,0" Style="{StaticResource BaseTextBox}" HorizontalAlignment="Stretch" Width="Auto" />
+                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
+                    </GroupBox>
+                    <GroupBox Header="Тотем" Style="{StaticResource BaseGrBox}">
+                        <ComboBox SelectedItem="{Binding TitanInfo.TotemLevel}"
+                                  ItemsSource="{Binding TitanInfo.TotemLevelVariants}"
+                                  Margin="0,10,0,0" Style="{StaticResource DefaultCb}" />
                     </GroupBox>
 
-                    <Grid Margin="0,6,0,10" Width="145">
-                        <Image Source="{Binding TitanInfo.TitanFaceImg}" Margin="50,0,0,0" HorizontalAlignment="Left" Width="54" />
-                        <Image Source="{Binding TitanInfo.TitanBorderImg}" Margin="44,0,0,0" HorizontalAlignment="Left" Width="66" />
+                    <!--Source="{Binding TitanInfo.FaceImage}" Source="Titan/TitanPic/Ara.png"
+                    Source="{Binding TitanInfo.BorderImage}" Source="Titan/TitanPic/SuperBorder.png"-->
+                    <Grid Width="103">
+                        <Grid HorizontalAlignment="Left" Width="103">
+                            <Image Source="{Binding TitanInfo.FaceImage}" Margin="25,0,0,0" HorizontalAlignment="Left"
+                                   Width="62" />
+                            <Image Source="{Binding TitanInfo.BorderImage}" HorizontalAlignment="Left" Width="69"
+                                   Margin="21,0,0,0" />
+                        </Grid>
                     </Grid>
                 </StackPanel>
             </GroupBox>
-            <starPanelControl:StarPanel Grid.Row="0" Margin="507,12,0,0"
+            <starPanelControl:StarPanel Grid.Row="0" Margin="576,12,0,0"
                                         StarCount="{Binding TitanCalc.CalcManager.TitanInfo.StarCount, Mode=TwoWay}"
-                                        HorizontalAlignment="Left" VerticalAlignment="Top" Width="111" Height="22" />
+                                        HorizontalAlignment="Left" VerticalAlignment="Top" Width="112" Height="22" />
+            <starPanelControl:StarPanel Grid.Row="0" Margin="502,53,0,0"
+                                        StarCount="{Binding TitanCalc.CalcManager.TitanInfo.TotemStars, Mode=TwoWay}"
+                                        HorizontalAlignment="Left" VerticalAlignment="Top" Width="58" Height="12" />
         </Grid>
         <mah:FlipView x:Name="FlipView" Margin="10,139,10,0" VerticalAlignment="Top"
                       Height="520" SelectedIndex="{Binding CalcManager.CurrentCalculatorIndex}"
@@ -105,13 +119,14 @@
                     <RowDefinition Height="112" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
-                    <RowDefinition/>
+                    <RowDefinition />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" MinWidth="484" />
-                    <ColumnDefinition Width="367" />
+                    <ColumnDefinition Width="Auto" MinWidth="480" />
+                    <ColumnDefinition Width="371" />
                 </Grid.ColumnDefinitions>
-                <GroupBox DataContext="{Binding CalcManager.TitanInfo.FirstArt}" Header="Повышение уровня артефакта атаки" HorizontalAlignment="Left" Height="107"
+                <GroupBox DataContext="{Binding CalcManager.TitanInfo.FirstArt}"
+                          Header="Повышение уровня артефакта атаки" HorizontalAlignment="Left" Height="107"
                           Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="0" Grid.Column="0">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
                         <GroupBox Header="Уровни" Style="{StaticResource BaseGrBox}">
@@ -122,20 +137,21 @@
                         </GroupBox>
                         <GroupBox Header="Изначально" Style="{StaticResource BaseGrBox}">
                             <TextBox Text="{Binding StatValue, UpdateSourceTrigger=PropertyChanged}"
-                                Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
+                                     Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
-                        <GroupBox Header="Увеличение" Style="{StaticResource BaseGrBox}" Height="67" VerticalAlignment="Top">
+                        <GroupBox Header="Увеличение" Style="{StaticResource BaseGrBox}">
                             <TextBox
                                 Text="{Binding IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="Эссенций" Style="{StaticResource BaseGrBox}">
                             <TextBox Text="{Binding LevelUpCost, UpdateSourceTrigger=PropertyChanged}"
-                                Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
+                                     Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox DataContext="{Binding CalcManager.TitanInfo.SecondArt}" Header="Повышение уровня артефакта защиты" HorizontalAlignment="Left" Height="107"
+                <GroupBox DataContext="{Binding CalcManager.TitanInfo.SecondArt}"
+                          Header="Повышение уровня артефакта защиты" HorizontalAlignment="Left" Height="107"
                           Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="1" Grid.Column="0">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
                         <GroupBox Header="Уровни" Style="{StaticResource BaseGrBox}">
@@ -161,30 +177,30 @@
                         </GroupBox>
                     </StackPanel>
                 </GroupBox>
-                <GroupBox HorizontalAlignment="Left" Height="126"
+                <GroupBox HorizontalAlignment="Left" Height="126" Grid.Column="0"
                           Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="3"
                           Background="#CC2E630A" BorderBrush="#CC2E630A">
                     <GroupBox.Header>
                         <TextBlock Text="{Binding ResultDesc}" FontWeight="Bold" Foreground="White" />
                     </GroupBox.Header>
                     <Grid Margin="0,0,0,-1" Background="White">
-                        <Grid.RowDefinitions>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="272" />
-                            <ColumnDefinition Width="181" />
+                            <ColumnDefinition Width="282" />
+                            <ColumnDefinition Width="172" />
                         </Grid.ColumnDefinitions>
-                        <GroupBox Style="{StaticResource BaseGrBox}" Header="Итог" Margin="0,5,24,0"
+                        <GroupBox Style="{StaticResource BaseGrBox}" Header="Лучше на" Margin="0,5,20,0"
                                   Width="127" BorderBrush="#FF104463" Grid.Column="4"
                                   HorizontalAlignment="Right">
-                            <TextBox Text="{Binding Result, Mode=OneWay}" Margin="4,10,0,0"
-                                     Style="{StaticResource BaseTextBox}" IsReadOnly="True"
-                                     Background="#FFB64B41" Width="105" Foreground="White" FontWeight="Bold"
-                                     BorderBrush="Black" />
+                            <StackPanel Margin="4,10,-2,5" Orientation="Horizontal">
+                                <TextBox Text="{Binding Result, Mode=OneWay}"
+                                         Style="{StaticResource BaseTextBox}" IsReadOnly="True"
+                                         Background="#FFB64B41" Width="88" Foreground="White" FontWeight="Bold"
+                                         BorderBrush="Black" />
+                                <Label Content="%" />
+                            </StackPanel>
                         </GroupBox>
                         <Grid Grid.ColumnSpan="4" Grid.Column="0">
                             <Grid.RowDefinitions>
@@ -193,70 +209,87 @@
                             </Grid.RowDefinitions>
                             <Label Content="Увеличение урона:" HorizontalAlignment="Left" Margin="5,7,0,0"
                                    VerticalAlignment="Top" Height="31" Width="151" />
-                            <Label Content="Увеличение ЭХП:" HorizontalAlignment="Left" Margin="5,10,0,0"
+                            <Label Content="Увеличение ЭХП:" HorizontalAlignment="Left" Margin="5,7,0,0"
                                    VerticalAlignment="Top" Grid.Row="1" Height="31" Width="140" />
-                            <TextBox Grid.Row="0" Text="{Binding AtackIncreaseEffective, Mode=OneWay}" Margin="158,10,0,0"
+                            <TextBox Grid.Row="0" Text="{Binding AtackIncreaseEffective, Mode=OneWay}"
+                                     Margin="158,10,0,0"
                                      Style="{StaticResource BaseTextBox}" IsReadOnly="True"
-                                     Background="#FFD47D75" Width="105" Foreground="White" FontWeight="Bold"
+                                     Background="#FFD47D75" Width="95" Foreground="White" FontWeight="Bold"
                                      BorderBrush="White" Height="26" />
                             <TextBox Text="{Binding HpIncreaseEffective, Mode=OneWay}" Margin="158,10,0,0"
                                      Style="{StaticResource BaseTextBox}" IsReadOnly="True"
-                                     Background="#FFD47D75" Width="105" Foreground="White" FontWeight="Bold"
+                                     Background="#FFD47D75" Width="95" Foreground="White" FontWeight="Bold"
                                      BorderBrush="White" Grid.Row="1" Height="26" />
+                            <Label Grid.Row="1" Content="%" Margin="253,7,0,0" HorizontalAlignment="Left" Width="24"
+                                   Height="31" VerticalAlignment="Top" />
+                            <Label Grid.Row="0" Content="%" Margin="253,7,0,0" HorizontalAlignment="Left" Width="23"
+                                   Height="31" VerticalAlignment="Top" />
                         </Grid>
                     </Grid>
                 </GroupBox>
-
-                <starPanelControl:StarPanel Grid.Row="0" Grid.Column="0" Margin="355,7,0,0"
+                <starPanelControl:StarPanel Grid.Row="0" Grid.Column="0" Margin="348,7,0,0"
                                             StarCount="{Binding CalcManager.TitanInfo.FirstArt.StarCount, Mode=TwoWay}"
                                             HorizontalAlignment="Left" Width="109" Height="22" VerticalAlignment="Top" />
-                <starPanelControl:StarPanel Grid.Row="1" Grid.Column="0" Margin="355,7,0,0"
+                <starPanelControl:StarPanel Grid.Row="1" Grid.Column="0" Margin="348,7,0,0"
                                             StarCount="{Binding CalcManager.TitanInfo.SecondArt.StarCount, Mode=TwoWay}"
                                             HorizontalAlignment="Left" Width="109" Height="22" VerticalAlignment="Top" />
-                <Grid DataContext="{Binding CalcManager}" Grid.Column="1" Margin="10,7,178,93" Grid.Row="0" Grid.RowSpan="4">
-                    <Button Content="Удалить"
-                        Command="{Binding DeleteEntryCommand}"
-                        Style="{StaticResource CommandBtn}"
-                        Margin="0,324,0,0" Width="163" />
-                    <Button Content="Очистить"
-                        Style="{StaticResource CommandBtn}"
-                        Command="{Binding ClearCommand}"
-                        Width="163" Margin="0,289,0,0" />
-                    <Button Content="Записать"
-                        IsEnabled="{Binding HasAddNewTitanToCalc}"
-                        Command="{Binding AddNewEntryCommand}"
-                        Style="{StaticResource CommandBtn}"
-                        Margin="0,362,0,0" Width="163" />
-                    <GroupBox Header="Лог вычислений"
-                          Margin="0,0,-18,0" Grid.Row="0"
-                          Height="257" VerticalAlignment="Top" HorizontalAlignment="Left" Width="181">
-                        <DataGrid ItemsSource="{Binding CalculatedTitanList}" 
-                              SelectedIndex="{Binding SelectedTableIndex}"
-                              IsReadOnly="True" AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
-                              Margin="0,0,1,5" />
+                <Grid DataContext="{Binding CalcManager}" Grid.Column="1" Margin="9,7,156,30" Grid.Row="0"
+                      Grid.RowSpan="4">
+                    <StackPanel Margin="20,371,23,0" Orientation="Vertical" Height="88" VerticalAlignment="Top">
+                        <Button Content="Очистить"
+                                Style="{StaticResource CommandBtn}"
+                                Command="{Binding ClearCommand}"
+                                Width="163" />
+                        <Separator Background="White" />
+                        <Button Content="Удалить"
+                                Command="{Binding DeleteEntryCommand}"
+                                Style="{StaticResource CommandBtn}"
+                                Width="163" />
+                        <Separator Background="White" />
+                        <Button Content="Записать"
+                                IsEnabled="{Binding HasAddNewTitanToCalc}"
+                                Command="{Binding AddNewEntryCommand}"
+                                Style="{StaticResource CommandBtn}"
+                                Width="163" />
+                    </StackPanel>
+                    <GroupBox Header="Лог вычислений" Grid.Row="0"
+                              Height="360" VerticalAlignment="Top" HorizontalAlignment="Left" Width="201"
+                              Margin="-1,0,0,0">
+                        <DataGrid ItemsSource="{Binding CalculatedTitanList}"
+                                  SelectedIndex="{Binding SelectedTableIndex}"
+                                  IsReadOnly="True" AutoGeneratingColumn="DataGrid_OnAutoGeneratingColumn"
+                                  Margin="0,0,1,5" />
                     </GroupBox>
+                    <mah:ProgressRing IsActive="{Binding IsDbLoading}" Margin="58,146,48,225" Height="100" Width="100"></mah:ProgressRing>
                 </Grid>
-                <GroupBox DataContext="{Binding CalcManager.TitanInfo.SealArt}" Header="Артефакт печати" HorizontalAlignment="Left" Height="107"
-                    Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="2" Grid.Column="0" Background="#CCB0650C">
+                <GroupBox DataContext="{Binding CalcManager.TitanInfo.SealArt}" Header="Артефакт печати"
+                          HorizontalAlignment="Left" Height="107"
+                          Margin="10,5,0,0" VerticalAlignment="Top" Width="463" Grid.Row="2" Grid.Column="0"
+                          Background="#CCB0650C">
                     <StackPanel Orientation="Horizontal" Margin="0,0,0,2">
                         <GroupBox Header="Уровень" Style="{StaticResource BaseGrBox}">
-                            <ComboBox SelectedValue="{Binding LevelInfo}"
-                                ItemsSource="{Binding LevelVariants}"
-                                Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
+                            <ComboBox SelectedValue="{Binding Level}"
+                                      ItemsSource="{Binding LevelVariants}"
+                                      Style="{StaticResource DefaultCb}" Margin="0,10,0,0" />
                         </GroupBox>
                         <GroupBox Header="Атака" Style="{StaticResource BaseGrBox}">
                             <TextBox
-                                Text="{Binding StatValue, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding Attack, UpdateSourceTrigger=PropertyChanged}"
                                 Margin="4,10,0,0" Style="{StaticResource BaseTextBox}" />
                         </GroupBox>
                         <GroupBox Header="ХП" Style="{StaticResource BaseGrBox}">
                             <TextBox
-                                Text="{Binding IncreaseStatValue, UpdateSourceTrigger=PropertyChanged}"
+                                Text="{Binding Hp, UpdateSourceTrigger=PropertyChanged}"
                                 Style="{StaticResource BaseTextBox}" Margin="4,10,0,0" />
                         </GroupBox>
-                        <Grid Margin="0,0,0,3" Width="112"/>
+                        <Grid Margin="0,0,0,3" Width="112">
+                            <Image Source="{Binding Image}" Margin="15,0,0,0" HorizontalAlignment="Left" Width="89" />
+                        </Grid>
                     </StackPanel>
                 </GroupBox>
+                <starPanelControl:StarPanel Grid.Row="2" Grid.Column="0" Margin="348,7,0,0"
+                                            StarCount="{Binding CalcManager.TitanInfo.SealArt.StarCount, Mode=TwoWay}"
+                                            HorizontalAlignment="Left" Width="109" Height="22" VerticalAlignment="Top" />
             </Grid>
             <Grid />
             <Grid />

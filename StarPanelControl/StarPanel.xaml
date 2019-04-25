@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:HWEnchCalc"
              xmlns:starPanelControl="clr-namespace:HWEnchCalc.StarPanelControl"
-             mc:Ignorable="d" Height="26.939" Width="132.105">
+             mc:Ignorable="d" Height="27" Width="132">
     <UserControl.Resources>
         <Style TargetType="Image">
             <Setter Property="Source" Value="Images/SimplStar.png"></Setter>
@@ -17,10 +17,10 @@
             <MouseBinding MouseAction="LeftClick" Command="{Binding ChangeStarCountCommand}"></MouseBinding>
             <MouseBinding MouseAction="LeftDoubleClick" Command="{Binding ChangeStarCountCommand}"></MouseBinding>
         </StackPanel.InputBindings>
-        <Image Visibility="{Binding Star1.Visibility}"/>
-        <Image Visibility="{Binding Star2.Visibility}"  />
-        <Image Visibility="{Binding Star3.Visibility}" Source="{Binding AbsStarImage}" Width="{Binding AbsStarWidth}" />
-        <Image Visibility="{Binding Star4.Visibility}"  />
-        <Image Visibility="{Binding Star5.Visibility}"  />
+        <Image Visibility="{Binding Star1.Visibility}" />
+        <Image Visibility="{Binding Star2.Visibility}" />
+        <Image Visibility="{Binding Star3.Visibility}" Source="{Binding AbsStarImage}" />
+        <Image Visibility="{Binding Star4.Visibility}" />
+        <Image Visibility="{Binding Star5.Visibility}" />
     </StackPanel>
 </UserControl>

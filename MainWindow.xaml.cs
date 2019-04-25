@@ -1,17 +1,27 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Windows.Controls;
+using HWEnchCalc.Common;
 using HWEnchCalc.Config;
 using HWEnchCalc.Core;
 using HWEnchCalc.Titan;
+using MahApps.Metro.Controls.Dialogs;
 
 namespace HWEnchCalc
 {
-
     public partial class MainWindow
     {
-       public MainWindow()
+        public MainWindow()
         {
             InitializeComponent();
+
+            Global<ProgressDialogController>
+                .SetAwaitDialog(this.ShowProgressAsync("Пожалуйста подождите", "Идет выгрузка данных..."));
+
+
+            Title = $"{Title} v{Assembly.GetExecutingAssembly().GetName().Version}";
 
             var config = ConfigurationManager.GetConfig();
             DataContext = new HwEnchCalcViewModel(config);
@@ -25,6 +35,6 @@ namespace HWEnchCalc
                 e.Column.Header = att.Name;
                 e.Cancel = att.IsHide;
             }
-        }
+}
     }
 }

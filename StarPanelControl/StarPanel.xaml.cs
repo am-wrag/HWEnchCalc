@@ -16,6 +16,9 @@ namespace HWEnchCalc.StarPanelControl
         //    new UIPropertyMetadata(1, StarCountChanged),
         //    ValidateMyNumbere);
 
+        private const int AbsoluteStartCount = 6;
+
+
         public static readonly DependencyProperty StarCountProperty = DependencyProperty.Register(
             "StarCount",
             typeof(int),
@@ -31,29 +34,21 @@ namespace HWEnchCalc.StarPanelControl
             var starCount = panel.StarCount;
             var viewModel = panel.StarPanelViewModel;
 
-            if (starCount == 6)
+            viewModel.ShowStars(starCount);
+
+            if (starCount == AbsoluteStartCount)
             {
-                viewModel.Stars.ForEach(s => s.Hide());
                 viewModel.SetAbsMiddleStar();
                 return;
             }
 
             viewModel.SetSimpleMiddleStar();
-
-            for (var i = 0; i < starCount; i++)
-            {
-                viewModel.Stars[i].Show();
-            }
-            for (var i = starCount; i < viewModel.Stars.Count; i++)
-            {
-                viewModel.Stars[i].Hide();
-            }
         }
 
         private static bool ValidateMyNumbere(object value)
         {
             if (!int.TryParse(value.ToString(), out var res)) return false;
-            return res > 0 && res < 7;
+            return res > 0 && res <= AbsoluteStartCount;
         }
 
         public int StarCount
@@ -75,7 +70,7 @@ namespace HWEnchCalc.StarPanelControl
         {
             if(e.PropertyName != nameof(StarCount)) return;
 
-            if (StarCount > 5)
+            if (StarCount >= AbsoluteStartCount)
             {
                 StarCount = 1;
             }

@@ -14,8 +14,10 @@ namespace HWEnchCalc.DB
                 Attack = titanInfo.Attack,
                 Hp = titanInfo.Hp,
                 StarCount = titanInfo.StarCount,
+                TotemLevel = titanInfo.TotemLevel,
+                TotemStars = titanInfo.TotemStars,
                 Ticks = DateTime.Now.Ticks,
-                FirstArtefact = new TitatnArtefactInfoDbo
+                FirstArtefact = new ElementArtInfoDbo
                 {
                     ArtefactType = titanInfo.FirstArt.ArtefactType,
                     LevelUpCost = titanInfo.FirstArt.LevelUpCost,
@@ -24,7 +26,7 @@ namespace HWEnchCalc.DB
                     StarCount = titanInfo.FirstArt.StarCount,
                     StatValue = titanInfo.FirstArt.StatValue
                 },
-                SecondArtefact = new TitatnArtefactInfoDbo()
+                SecondArtefact = new ElementArtInfoDbo()
                 {
                     ArtefactType = titanInfo.SecondArt.ArtefactType,
                     LevelUpCost = titanInfo.SecondArt.LevelUpCost,
@@ -33,14 +35,14 @@ namespace HWEnchCalc.DB
                     StarCount = titanInfo.SecondArt.StarCount,
                     StatValue = titanInfo.SecondArt.StatValue
                 },
-                SealArtefact = new TitatnArtefactInfoDbo()
+                SealArtefact = new SealArtInfoDbo()
                 {
                     ArtefactType = titanInfo.SealArt.ArtefactType,
-                    LevelUpCost = titanInfo.SealArt.LevelUpCost,
-                    IncreaseStatValue = titanInfo.SealArt.IncreaseStatValue,
-                    LevelInfo = titanInfo.SealArt.LevelInfo,
+                    Level = titanInfo.SealArt.Level,
+                    Attack = titanInfo.SealArt.Attack,
+                    Hp = titanInfo.SealArt.Hp,
                     StarCount = titanInfo.SealArt.StarCount,
-                    StatValue = titanInfo.SealArt.StatValue
+                    LevelUpCost = titanInfo.SealArt.LevelUpCost
                 }
             };
         }

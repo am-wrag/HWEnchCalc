@@ -1,6 +1,6 @@
-﻿namespace HWEnchCalc.Titan.TitanArtefactData
+﻿namespace HWEnchCalc.Titan.ArtefactData
 {
-    public class TitanArtLevelUpInfo
+    public class ElementArtLevelUpInfo
     {
         public string LevelInfo { get; }
         /// <summary>
@@ -17,7 +17,7 @@
         /// </summary>
         public int IncreaseStatValue { get; }
 
-        public TitanArtLevelUpInfo(string levelInfo, int statValue, int lvlUpCostValue, int increaseStatValue)
+        public ElementArtLevelUpInfo(string levelInfo, int statValue, int lvlUpCostValue, int increaseStatValue)
         {
             LevelInfo = levelInfo;
             StatValue = statValue;
@@ -25,9 +25,9 @@
             IncreaseStatValue = increaseStatValue;
         }
 
-        public static TitanArtLevelUpInfo Empty()
+        public static ElementArtLevelUpInfo Empty()
         {
-            return new TitanArtLevelUpInfo(string.Empty, new int(), new int(), new int());
+            return new ElementArtLevelUpInfo(string.Empty, new int(), new int(), new int());
         }
     }
 }
