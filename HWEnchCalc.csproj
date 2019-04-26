@@ -180,6 +180,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Calculators\TitanCalc\TitanCalculationDataManager.cs" />
+    <Compile Include="Common\BigNumberConvertor.cs" />
     <Compile Include="Common\Global.cs" />
     <Compile Include="Config\GameInfo.cs" />
     <Compile Include="Config\TitanData.cs" />

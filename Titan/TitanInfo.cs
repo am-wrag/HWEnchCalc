@@ -28,6 +28,7 @@ namespace HWEnchCalc.Titan
                 UpdateSealArtefact();
                 UpdateTitanStats();
                 PropertyChangedByMember();
+                PropertyChangedByName(nameof(TotemName));
             }
         }
 
@@ -92,6 +93,8 @@ namespace HWEnchCalc.Titan
                 PropertyChangedByMember();
             }
         }
+
+        public string TotemName => _titanHelper.TotemHelper.GetName(TitanSourceInfo);
 
         private TitanSourceInfo TitanSourceInfo => _titanHelper.GetTitanSourseInfo(_name);
         private readonly TitanSourceDataHelper _titanHelper;

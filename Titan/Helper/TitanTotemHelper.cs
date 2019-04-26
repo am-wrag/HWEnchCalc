@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using HWEnchCalc.Config;
@@ -113,6 +114,20 @@ namespace HWEnchCalc.Titan.Helper
             }
         }
 
-
+        public string GetName(TitanSourceInfo titanSourceInfo)
+        {
+            if (titanSourceInfo == null) return string.Empty;
+           
+            switch (titanSourceInfo.TotemType)
+            {
+                case TotemType.Earth:
+                    return "Земля";
+                case TotemType.Fire:
+                    return "Огонь";
+                case TotemType.Water:
+                    return "Вода";
+                default: return string.Empty;;
+            }
+        }
     }
 }
