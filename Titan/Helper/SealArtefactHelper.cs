@@ -25,10 +25,7 @@ namespace HWEnchCalc.Titan.Helper
 
         public SealArtefactHelper(Configuration config)
         {
-            if (config?.GameInfo?.TitanDatas != null)
-            {
-                GetArtefactInfos(config.GameInfo.TitanDatas);
-            }
+            GetArtefactInfos(config.GameInfo.TitanDatas);
         }
 
         public SealArtSourceInfo GetLevelInfo(int level, ArtefactType artefactType)

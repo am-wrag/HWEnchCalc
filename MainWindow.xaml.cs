@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Reflection;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 using HWEnchCalc.Common;
 using HWEnchCalc.Config;
@@ -20,8 +18,7 @@ namespace HWEnchCalc
             Global<ProgressDialogController>
                 .SetAwaitDialog(this.ShowProgressAsync("Пожалуйста подождите", "Идет выгрузка данных..."));
 
-
-            Title = $"{Title} v{Assembly.GetExecutingAssembly().GetName().Version}";
+            Title = $"{Title} preAlfa v{Assembly.GetExecutingAssembly().GetName().Version}";
 
             var config = ConfigurationManager.GetConfig();
             DataContext = new HwEnchCalcViewModel(config);
@@ -35,6 +32,6 @@ namespace HWEnchCalc
                 e.Column.Header = att.Name;
                 e.Cancel = att.IsHide;
             }
-}
+        }
     }
 }

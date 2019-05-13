@@ -9,7 +9,7 @@ namespace HWEnchCalc.Titan.ArtefactData
     public class SealArtInfo : NotifyPropertyChangedBase
     {
         public ArtefactType ArtefactType { get; private set; }
-        public List<int> LevelVariants { get; }
+        public List<int> LevelVariants => _artefactHelper.GetLevelVariants(ArtefactType);
 
         public int Level
         {
@@ -55,7 +55,7 @@ namespace HWEnchCalc.Titan.ArtefactData
         }
 
         public int LevelUpCost { get; set; }
-        public BitmapImage Image { get; set; }
+        public BitmapImage Image { get; private set; }
 
         private int _level;
         private readonly SealArtefactHelper _artefactHelper;
@@ -68,7 +68,6 @@ namespace HWEnchCalc.Titan.ArtefactData
         {
             ArtefactType = artefactType;
             Image = titanHelper.SealArtefactHelper.GetImage(artefactType);
-            LevelVariants = titanHelper.SealArtefactHelper.GetLevelVariants(artefactType);
             _artefactHelper = titanHelper.SealArtefactHelper;
         }
 
@@ -80,6 +79,7 @@ namespace HWEnchCalc.Titan.ArtefactData
             Attack = artInfo.Attack;
             Hp = artInfo.Hp;
             LevelUpCost = artInfo.LevelUpCost;
+            PropertyChangedByName(nameof(LevelVariants));
         }
 
         public void Update(TitanSourceInfo titanSourceInfo)
@@ -87,6 +87,7 @@ namespace HWEnchCalc.Titan.ArtefactData
             Image = _artefactHelper.GetImage(titanSourceInfo.SealArtefact);
             ArtefactType = titanSourceInfo.SealArtefact;
             UpdateStats();
+            PropertyChangedByName(nameof(LevelVariants));
             PropertyChangedByName(nameof(ArtefactType));
             PropertyChangedByName(nameof(Image));
         }

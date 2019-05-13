@@ -9,21 +9,30 @@ namespace HWEnchCalc.Titan.Helper
 {
     public class TitanSourceDataHelper
     {
-        private List<TitanSourceInfo> _titanSourceInfo = new List<TitanSourceInfo>();
+        public int TitanMaxLevel;
         public ElementalArtefactHelper ElementArtefactHelper;
         public SealArtefactHelper SealArtefactHelper;
         public TotemHelper TotemHelper;
+        public TitanGuiseHelper GuiseHelper;
+
+        private List<TitanSourceInfo> _titanSourceInfo = new List<TitanSourceInfo>();
+
+        //из игровых формул
+        private const double TitalLevelPowСoefficient = 1.5;
 
         public TitanSourceDataHelper Fill(Configuration config)
         {
             if (config?.GameInfo?.TitanDatas != null)
             {
+                TitanMaxLevel = config.GameInfo.TitanDatas.TitanMaxLevel;
+
+                _titanSourceInfo = GetSourceTitanInfo(config.GameInfo.TitanDatas).ToList();
+
                 ElementArtefactHelper = new ElementalArtefactHelper(config);
                 SealArtefactHelper = new SealArtefactHelper(config);
                 TotemHelper = new TotemHelper(config);
-                _titanSourceInfo = GetSourceTitanInfo(config.GameInfo.TitanDatas).ToList();
+                GuiseHelper = new TitanGuiseHelper(config.GameInfo.TitanDatas);
             }
-
             return this;
         }
 
@@ -36,9 +45,6 @@ namespace HWEnchCalc.Titan.Helper
         {
             return _titanSourceInfo.Find(t => t.Name == titanName);
         }
-
-        //взято из игровых формул
-        private const double TitalLevelPowСoefficient = 1.5;
 
         public (double Hp, double Attack) GetHpAndAttack(TitanSourceInfo titan, int level, int starCount)
         {

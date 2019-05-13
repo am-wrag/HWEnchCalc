@@ -179,11 +179,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Calculators\TitanCalc\GuiseCalculator.cs" />
+    <Compile Include="Calculators\TitanCalc\EssenceCalculator.cs" />
+    <Compile Include="Calculators\TitanCalc\ITitanCalculator.cs" />
     <Compile Include="Calculators\TitanCalc\TitanCalculationDataManager.cs" />
     <Compile Include="Common\BigNumberConvertor.cs" />
+    <Compile Include="Common\Extentions.cs" />
     <Compile Include="Common\Global.cs" />
     <Compile Include="Config\GameInfo.cs" />
     <Compile Include="Config\TitanData.cs" />
+    <Compile Include="Calculators\TitanCalc\TitanCompareCalc.cs" />
+    <Compile Include="Calculators\TitanCalc\TitanCompareData.cs" />
+    <Compile Include="Core\TitanCompareWindowViewModel.cs" />
+    <Compile Include="DB\GuiseInfoDbo.cs" />
     <Compile Include="DB\TitanInfoBuilder.cs" />
     <Compile Include="DB\SealArtInfoDbo.cs" />
     <Compile Include="DB\ElementArtInfoDbo.cs" />
@@ -196,12 +204,23 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AssemblyInfo.tt</DependentUpon>
     </Compile>
+    <Compile Include="TitanCompareWindow.xaml.cs">
+      <DependentUpon>TitanCompareWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Titan\Guise\GuiseInfo.cs" />
     <Compile Include="Titan\ArtefactData\SealArtInfo.cs" />
     <Compile Include="Titan\ArtefactData\SealArtSourceInfo.cs" />
     <Compile Include="Titan\ArtefactData\TotemLevelInfo.cs" />
+    <Compile Include="Titan\Guise\GuiseType.cs" />
+    <Compile Include="Titan\Guise\GuiseSourseInfo.cs" />
+    <Compile Include="Titan\Helper\TitanGuiseHelper.cs" />
     <Compile Include="Titan\Helper\SealArtefactHelper.cs" />
     <Compile Include="Titan\Helper\TitanTotemHelper.cs" />
     <Compile Include="Titan\TotemType.cs" />
+    <Page Include="HWCalculatorStyles.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -225,14 +244,14 @@
     <Compile Include="Calculators\CalculatorManager.cs" />
     <Compile Include="Titan\ArtefactData\ArtefactType.cs" />
     <Compile Include="Common\CulumnAttribute.cs" />
-    <Compile Include="Calculators\TitanCalc\TitanShortInfo.cs" />
+    <Compile Include="Calculators\TitanCalc\TitanShowedData.cs" />
     <Compile Include="Titan\Helper\ElementalArtefactHelper.cs" />
     <Compile Include="Titan\Helper\TitanSourceDataHelper.cs" />
     <Compile Include="Titan\TitanSourceInfo.cs" />
     <Compile Include="Titan\TitanStatPerStar.cs" />
     <Compile Include="Titan\TitanInfo.cs" />
     <Compile Include="Common\WpfCommand.cs" />
-    <Compile Include="Calculators\TitanCalculator.cs" />
+    <Compile Include="Calculators\TitanCalculatorCore.cs" />
     <Compile Include="DB\DbOperator.cs" />
     <Compile Include="Common\JsonParser.cs" />
     <Compile Include="Titan\ArtefactData\ElementalArtInfo.cs" />
@@ -242,6 +261,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="StarPanelControl\StarPanel.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="TitanCompareWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -262,6 +285,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Resource Include="Titan\TitanPic\EarthTotem.png" />
+    <Resource Include="Titan\TitanPic\FireTotem.png" />
+    <Resource Include="Titan\TitanPic\WaterTotem.png" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -333,4 +359,9 @@
   </Target>
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.12\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.osx.1.1.12\build\net35\SQLitePCLRaw.lib.e_sqlite3.osx.targets')" />
   <Import Project="..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.12\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets" Condition="Exists('..\packages\SQLitePCLRaw.lib.e_sqlite3.v110_xp.1.1.12\build\net35\SQLitePCLRaw.lib.e_sqlite3.v110_xp.targets')" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties appsettings_1json__JSONSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

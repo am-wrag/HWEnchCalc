@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using HWEnchCalc.Calculators.TitanCalc;
-using HWEnchCalc.Titan;
 using Microsoft.EntityFrameworkCore;
 
 namespace HWEnchCalc.DB
@@ -11,11 +8,10 @@ namespace HWEnchCalc.DB
     public class DbOperator : DbContext
     {
         private readonly string _dbConnectionString;
-        public DbSet<TitanInfoDbo> TitanInfos { get; set; }
-        public DbSet<ElementArtInfoDbo> ElementalArtefactInfos { get; set; }
-        public DbSet<SealArtInfoDbo> SealArtefactInfos { get; set; }
 
-        public DbOperator(string dbConnectionString)
+        public DbSet<TitanInfoDbo> TitanInfos { get; set; }
+
+        public DbOperator( string dbConnectionString)
         {
             _dbConnectionString = dbConnectionString;
             CreateDbIfNotExist();
@@ -32,31 +28,32 @@ namespace HWEnchCalc.DB
             //var converter = new EnumToStringConverter<ArtefactType>();
 
             modelBuilder.Entity<TitanInfoDbo>()
-                .HasOne(c => c.FirstArtefact);
+                .HasOne(c => c.ElementalOffenceArtefact);
             modelBuilder.Entity<TitanInfoDbo>()
-                .HasOne(c => c.SecondArtefact);
+                .HasOne(c => c.ElementalDefenceAtrefact);
             modelBuilder.Entity<TitanInfoDbo>()
                 .HasOne(c => c.SealArtefact);
+            modelBuilder.Entity<TitanInfoDbo>()
+                .HasMany(c => c.Guises);
         }
 
-        public Task AddEssenceCalcInfoAsync(TitanInfo calcInfo)
+        public Task AddTitanInfoAsync(TitanInfoDbo calcInfo)
         {
-            return Task.Factory.StartNew(() => AddEssenceCalcInfo(calcInfo));
+            return Task.Factory.StartNew(() => AddTitanCalcInfo(calcInfo));
         }
 
-        public void AddEssenceCalcInfo(TitanInfo calcInfo)
+        public void AddTitanCalcInfo(TitanInfoDbo calcInfo)
         {
-            var titanInfo = new TitanInfoBuilder().GeTitanInfoDbo(calcInfo);
-            TitanInfos.Add(titanInfo);
+            TitanInfos.Add(calcInfo);
             SaveChanges();
         }
 
-        public Task DeleteEssenceCalcInfoByIdAsync(int id)
+        public Task DeleteTitanInfoByIdAsync(int id)
         {
-            return Task.Factory.StartNew(() => DeleteEssenceCalcInfoById(id));
+            return Task.Factory.StartNew(() => DeleteTitanInfoById(id));
         }
 
-        public void DeleteEssenceCalcInfoById(int id)
+        public void DeleteTitanInfoById(int id)
         {
             TitanInfos.Remove(TitanInfos.Find(id));
             SaveChanges();
@@ -75,21 +72,11 @@ namespace HWEnchCalc.DB
         public List<TitanInfoDbo> GetTitanCalculatedInfo()
         {
             return TitanInfos?
-                .Include(d => d.FirstArtefact)
-                .Include(d => d.SecondArtefact)
+                .Include(d => d.ElementalOffenceArtefact)
+                .Include(d => d.ElementalDefenceAtrefact)
                 .Include(d => d.SealArtefact)
+                .Include(d => d.Guises)
                 .ToList();
-        }
-
-        public Task<ObservableCollection<TitanShortInfo>> GetShortCalcInfosAsync()
-        {
-            return Task.Factory.StartNew(GetShortCalcInfos);
-        }
-
-        public ObservableCollection<TitanShortInfo> GetShortCalcInfos()
-        {
-            var result = TitanInfos.Select(t => new TitanShortInfo(t.Name, t.Id, t.Ticks));
-            return new ObservableCollection<TitanShortInfo>(result);
         }
     }
 }

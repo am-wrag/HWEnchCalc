@@ -2,7 +2,7 @@
 {
     public class ElementArtLevelUpInfo
     {
-        public string LevelInfo { get; }
+        public int Level { get; }
         /// <summary>
         /// Значение характеристики для данного уровня
         /// </summary>
@@ -17,9 +17,9 @@
         /// </summary>
         public int IncreaseStatValue { get; }
 
-        public ElementArtLevelUpInfo(string levelInfo, int statValue, int lvlUpCostValue, int increaseStatValue)
+        public ElementArtLevelUpInfo(int level, int statValue, int lvlUpCostValue, int increaseStatValue)
         {
-            LevelInfo = levelInfo;
+            Level = level;
             StatValue = statValue;
             LvlUpCostValue = lvlUpCostValue;
             IncreaseStatValue = increaseStatValue;
@@ -27,7 +27,7 @@
 
         public static ElementArtLevelUpInfo Empty()
         {
-            return new ElementArtLevelUpInfo(string.Empty, new int(), new int(), new int());
+            return new ElementArtLevelUpInfo(new int(), new int(), new int(), new int());
         }
     }
 }

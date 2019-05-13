@@ -10,11 +10,17 @@ namespace HWEnchCalc.Common
             CultureInfo culture)
         {
             if (value == null) return new object();
-            
-            var val = Math.Round((double)value, 2);
+
+            var val = (double) value;
+
+            double result = 0;
+            if (val > 0)
+            {
+                result = Math.Round((double)value, 2);
+            }
 
             //Каждая решетка обозначает наличие числового символа, если он имеется
-            return val.ToString("### ### ###.#", culture).Trim();
+            return result.ToString("### ### ###.#", culture).Trim();
         }
 
         public object ConvertBack(object value, Type targetType, object parameter,

@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using HWEnchCalc.Titan.ArtefactData;
+using HWEnchCalc.Titan.Guise;
 
 namespace HWEnchCalc.Titan
 {
@@ -18,6 +19,7 @@ namespace HWEnchCalc.Titan
         public ArtefactType SealArtefact { get; set; }
         public TotemType TotemType { get; set; }
 
+        public List<GuiseType> Guises = new List<GuiseType>();
         public List<TitanStatPerStar> StatsPerLevelPerStar = new List<TitanStatPerStar>();
 
         public int MinStarLevel => StatsPerLevelPerStar.Min(t => t.StarCount);
@@ -32,6 +34,11 @@ namespace HWEnchCalc.Titan
         {
             var fi = new FileInfo(BorderImage);
             return new BitmapImage(new Uri(fi.FullName, UriKind.Absolute));
+        }
+
+        public override string ToString()
+        {
+            return Name;
         }
     }
 }

@@ -4,20 +4,25 @@ using HWEnchCalc.Titan;
 
 namespace HWEnchCalc.Calculators.TitanCalc
 {
-    public class TitanShortInfo : NotifyPropertyChangedBase
+    public class TitanShowedData : NotifyPropertyChangedBase
     {
         [Column("Id", true)]
         public int Id { get; }
+        [Column("None", true)]
+        public TitanInfo TitanInfo { get; }
+
         [Column("Имя")]
         public string Name { get; }
 
         [Column("Время записи")]
         public string DateTime { get; }
 
-        public TitanShortInfo(string name, int id, long ticks)
+
+        public TitanShowedData(int id, long ticks, TitanInfo titanInfo)
         {
-            Name = name;
+            Name = titanInfo.Name;
             Id = id;
+            TitanInfo = titanInfo;
             DateTime = new DateTime(ticks).ToString("yy:MM:dd HH:mm");
         }
     }

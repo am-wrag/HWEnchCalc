@@ -7,7 +7,7 @@ namespace HWEnchCalc.Common
     {
         private static Task<T> _awaiter;
 
-        public static Task<T> GetAwaitDialog()
+        public static Task<T> ShowAwaitDialog()
         {
             return _awaiter;
         }

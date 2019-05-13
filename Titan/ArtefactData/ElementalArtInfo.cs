@@ -7,16 +7,16 @@ namespace HWEnchCalc.Titan.ArtefactData
 {
     public class ElementalArtInfo : NotifyPropertyChangedBase
     {
-        public List<string> LevelVariants { get; }
+        public List<int> LevelVariants { get; }
 
         public ArtefactType ArtefactType { get; private set; }
 
-        public string LevelInfo
+        public int Level
         {
-            get => _levelInfo;
+            get => _level;
             set
             {
-                _levelInfo = value;
+                _level = value;
                 UpdateStats();
                 PropertyChangedByMember();
             }
@@ -73,7 +73,7 @@ namespace HWEnchCalc.Titan.ArtefactData
         private double _statValue;
         private double _increaseStatValue;
         private double _essenceValue;
-        private string _levelInfo;
+        private int _level;
         private int _starCount = 1;
         private double _starRaito = 1;
        
@@ -86,7 +86,7 @@ namespace HWEnchCalc.Titan.ArtefactData
 
         private void UpdateStats()
         {
-            var artLvlUp = _artefactHelper.GetElementArtLevelUpInfo(LevelInfo, ArtefactType);
+            var artLvlUp = _artefactHelper.GetElementArtLevelUpInfo(Level, ArtefactType);
             LevelUpCost = artLvlUp.LvlUpCostValue;
             StatValue = artLvlUp.StatValue * _starRaito;
             IncreaseStatValue = artLvlUp.IncreaseStatValue * _starRaito;
@@ -101,7 +101,7 @@ namespace HWEnchCalc.Titan.ArtefactData
         public void UpdateFromDbo(ElementArtInfoDbo artInfo)
         {
             ArtefactType = artInfo.ArtefactType;
-            LevelInfo = artInfo.LevelInfo;
+            Level = artInfo.Level;
             StarCount = artInfo.StarCount;
             StatValue = artInfo.StatValue;
             IncreaseStatValue = artInfo.IncreaseStatValue;

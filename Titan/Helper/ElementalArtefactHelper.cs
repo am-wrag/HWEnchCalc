@@ -8,37 +8,33 @@ namespace HWEnchCalc.Titan.Helper
 {
     public class ElementalArtefactHelper
     {
-        public const string FirstArtExceptedName = "FirstArt";
-        public const string SecondArtExceptedName = "SecondArt";
-
+        public const string FirstArtExceptedName = "ElementalOffence";
+        public const string SecondArtExceptedName = "ElementalDefence";
 
         private readonly Dictionary<ArtefactType, List<ElementArtLevelUpInfo>> _titanArtLvlUpInfo
             = new Dictionary<ArtefactType, List<ElementArtLevelUpInfo>>();
 
         public ElementalArtefactHelper(Configuration config)
         {
-            if (config?.GameInfo?.TitanDatas != null)
-            {
-                GetTitanArtefactInfos(config.GameInfo.TitanDatas);
-            }
+            GetTitanArtefactInfos(config.GameInfo.TitanDatas);
         }
 
-        public ElementArtLevelUpInfo GetElementArtLevelUpInfo(string levelInfo, ArtefactType artefactType)
+        public ElementArtLevelUpInfo GetElementArtLevelUpInfo(int level, ArtefactType artefactType)
         {
             if (!_titanArtLvlUpInfo.ContainsKey(artefactType))
             {
                 return ElementArtLevelUpInfo.Empty();
             }
 
-            return _titanArtLvlUpInfo[artefactType].Find(t => t.LevelInfo == levelInfo);
+            return _titanArtLvlUpInfo[artefactType].Find(t => t.Level == level);
         }
 
-        public List<string> GetArtLvlUpVariants(ArtefactType artefactType)
+        public List<int> GetArtLvlUpVariants(ArtefactType artefactType)
         {
-            if (!_titanArtLvlUpInfo.ContainsKey(artefactType)) return new List<string>();
+            if (!_titanArtLvlUpInfo.ContainsKey(artefactType)) return new List<int>();
 
             return _titanArtLvlUpInfo[artefactType]
-                .Select(a => a.LevelInfo)
+                .Select(a => a.Level)
                 .ToList();
         }
 
@@ -63,27 +59,30 @@ namespace HWEnchCalc.Titan.Helper
             var artLvlUpInfos = new List<ElementArtLevelUpInfo>();
             var artefactType = GetArtefactTypeByFileName(fileName);
 
-            //последний уровень нам не нужен, поскольку выше его прокачать артефакт нельзя. Поэтому -2
-            for (var i = 0; i < levelsData.Count - 2; i++)
+            var levelData = levelsData[levelsData.Count - 1].Split('\t');
+            var statValue = int.Parse(levelData[1]);
+
+            // последний увровень, выше его прокачать нельзя
+            artLvlUpInfos.Add(new ElementArtLevelUpInfo(
+                levelsData.Count - 1, statValue, new int(), new int()));
+
+            //последний уровень нам не нужен, поскольку выше его прокачать артефакт нельзя.
+            for (var i = levelsData.Count - 2; i >= 0 ; i--)
             {
-                var levelData = levelsData[i].Split('\t');
+                levelData = levelsData[i].Split('\t');
                 var nextLevelData = levelsData[i + 1].Split('\t');
 
                 var level = int.Parse(levelData[0]);
-                var statValue = int.Parse(levelData[1]);
+                statValue = int.Parse(levelData[1]);
 
                 var nextLevelStatValue = int.Parse(nextLevelData[1]);
                 var costToLevelUpValue = int.Parse(nextLevelData[2]);
-
-                var levelUpInfo = $"{level}->{level + 1}";
+                
                 var increaseStatValue = nextLevelStatValue - statValue;
 
-                artLvlUpInfos.Add(new ElementArtLevelUpInfo(
-                    levelUpInfo,
-                    statValue,
-                    costToLevelUpValue,
-                    increaseStatValue));
+                artLvlUpInfos.Add(new ElementArtLevelUpInfo(level, statValue, costToLevelUpValue, increaseStatValue));
             }
+
             _titanArtLvlUpInfo[artefactType] = artLvlUpInfos;
         }
 
@@ -119,6 +118,19 @@ namespace HWEnchCalc.Titan.Helper
                     return 3;
                 default: return 0;
             }
+        }
+
+        public int GetTotalEssenceCount(ArtefactType artefactType, int level)
+        {
+            var result = 0;
+            var levels = _titanArtLvlUpInfo[artefactType];
+
+            for (var i = 1; i <= level; i++)
+            {
+                result += levels[i - 1].LvlUpCostValue;
+            }
+
+            return result;
         }
     }
 }

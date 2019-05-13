@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Media.Imaging;
 using HWEnchCalc.Config;
 using HWEnchCalc.Titan.ArtefactData;
 
@@ -114,6 +115,22 @@ namespace HWEnchCalc.Titan.Helper
             }
         }
 
+        public BitmapImage GetTotemImage(TitanSourceInfo titanSourceInfo)
+        {
+            if(titanSourceInfo == null) return new BitmapImage();
+
+            switch (titanSourceInfo.TotemType)
+            {
+                case TotemType.Earth:
+                    return new BitmapImage(new Uri("Titan/TitanPic/EarthTotem.png", UriKind.RelativeOrAbsolute));
+                case TotemType.Fire:
+                    return new BitmapImage(new Uri("Titan/TitanPic/FireTotem.png", UriKind.RelativeOrAbsolute));
+                case TotemType.Water:
+                    return new BitmapImage(new Uri("Titan/TitanPic/WaterTotem.png", UriKind.RelativeOrAbsolute));
+                default: return new BitmapImage();
+            }
+        }
+
         public string GetName(TitanSourceInfo titanSourceInfo)
         {
             if (titanSourceInfo == null) return string.Empty;
@@ -126,7 +143,7 @@ namespace HWEnchCalc.Titan.Helper
                     return "Огонь";
                 case TotemType.Water:
                     return "Вода";
-                default: return string.Empty;;
+                default: return string.Empty;
             }
         }
     }

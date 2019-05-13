@@ -1,22 +1,25 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Windows.Media.Imaging;
 using HWEnchCalc.Common;
-using HWEnchCalc.DB;
 using HWEnchCalc.Titan.ArtefactData;
+using HWEnchCalc.Titan.Guise;
 using HWEnchCalc.Titan.Helper;
 
 namespace HWEnchCalc.Titan
 {
     public class TitanInfo : NotifyPropertyChangedBase
     {
-        public List<int> LevelVariants { get; set; } = new List<int>();
-        public List<int> TotemLevelVariants { get; set; } = new List<int>();
-        public BitmapImage FaceImage { get; set; }
-        public BitmapImage BorderImage { get; set; }
-        public ElementalArtInfo FirstArt { get; set; }
-        public ElementalArtInfo SecondArt { get; set; }
-        public SealArtInfo SealArt { get; set; }
+        public List<int> LevelVariants { get; } = new List<int>();
+        public List<int> TotemLevelVariants { get; } = new List<int>();
+        public ObservableCollection<GuiseInfo> Guises { get; }
+        public BitmapImage FaceImage { get; private set; }
+        public BitmapImage BorderImage { get; private set; }
+        public ElementalArtInfo ElementalOffenceArt { get; }
+        public ElementalArtInfo ElementalDefenceArt { get; }
+        public SealArtInfo SealArt { get; }
 
         public string Name
         {
@@ -25,10 +28,12 @@ namespace HWEnchCalc.Titan
             {
                 _name = value;
                 UpdateTitanImage();
+                UpdateGuises();
                 UpdateSealArtefact();
                 UpdateTitanStats();
                 PropertyChangedByMember();
                 PropertyChangedByName(nameof(TotemName));
+                PropertyChangedByName(nameof(TotemImage));
             }
         }
 
@@ -54,25 +59,26 @@ namespace HWEnchCalc.Titan
             }
         }
 
-        public double Attack
+        public double TotalAttack
         {
-            get => _attack;
+            get => _totalAttack;
             set
             {
-                _attack = value;
+                _totalAttack = value;
                 PropertyChangedByMember();
             }
         }
 
-        public double Hp
+        public double TotalHp
         {
-            get => _hp;
+            get => _totalHp;
             set
             {
-                _hp = value;
+                _totalHp = value;
                 PropertyChangedByMember();
             }
         }
+
         public int TotemLevel
         {
             get => _totemLevel;
@@ -83,6 +89,7 @@ namespace HWEnchCalc.Titan
                 PropertyChangedByMember();
             }
         }
+
         public int TotemStars
         {
             get => _totemStars;
@@ -95,38 +102,89 @@ namespace HWEnchCalc.Titan
         }
 
         public string TotemName => _titanHelper.TotemHelper.GetName(TitanSourceInfo);
+        [NotMapped] public BitmapImage TotemImage => _titanHelper.TotemHelper.GetTotemImage(TitanSourceInfo);
 
         private TitanSourceInfo TitanSourceInfo => _titanHelper.GetTitanSourseInfo(_name);
         private readonly TitanSourceDataHelper _titanHelper;
-        private double _attack;
-        private double _hp;
+        private double _totalAttack;
+        private double _totalHp;
         private string _name;
         private int _totemLevel;
         private int _totemStars = 1;
         private int _starCount = 1;
         private int _level = 1;
 
-        public TitanInfo(TitanSourceDataHelper titanHelper, int maxLevel)
+        public TitanInfo(TitanSourceDataHelper titanHelper)
         {
             _titanHelper = titanHelper;
 
-            FirstArt = new ElementalArtInfo(ArtefactType.ElementalOffence, titanHelper);
-            SecondArt = new ElementalArtInfo(ArtefactType.ElementalDefence, _titanHelper);
+            var defaultGuise = new GuiseInfo(GuiseType.None, titanHelper);
+            Guises = new ObservableCollection<GuiseInfo> {defaultGuise};
+
+            ElementalOffenceArt = new ElementalArtInfo(ArtefactType.ElementalOffence, titanHelper);
+            ElementalDefenceArt = new ElementalArtInfo(ArtefactType.ElementalDefence, titanHelper);
             SealArt = new SealArtInfo(ArtefactType.None, titanHelper);
 
-            FirstArt.PropertyChanged += NotifyCalculator;
-            SecondArt.PropertyChanged += NotifyCalculator;
-            SealArt.PropertyChanged += UpdateStats;
+            SetSubscriptions();
+            SetTitanLevels();
+        }
 
-            TotemLevelVariants.Add(0);//нулевой уровень = отсутствие тотема
-            for (var i = maxLevel; i > 0; i--)
+        public TitanInfo(
+            string name,
+            int level,
+            double totalAttack,
+            double totalHp,
+            int starCount,
+            int totemLevel,
+            int totemStars,
+            ElementalArtInfo elementalOffenceArt,
+            ElementalArtInfo elementalDefenceArt,
+            SealArtInfo sealArtInfo,
+            ObservableCollection<GuiseInfo> guises,
+            TitanSourceDataHelper titanHelper)
+        {
+            _titanHelper = titanHelper;
+
+            _name = name;
+            _level = level;
+            _totalAttack = totalAttack;
+            _totalHp = totalHp;
+            _starCount = starCount;
+            _totemLevel = totemLevel;
+            _totemStars = totemStars;
+
+            Guises = guises;
+            ElementalOffenceArt = elementalOffenceArt;
+            ElementalDefenceArt = elementalDefenceArt;
+            SealArt = sealArtInfo;
+
+            SetSubscriptions();
+            SetTitanLevels();
+            UpdateTitanImage();
+        }
+
+        private void SetTitanLevels()
+        {
+            TotemLevelVariants.Add(0); //нулевой уровень = отсутствие тотема
+            for (var i = _titanHelper.TitanMaxLevel; i > 0; i--)
             {
                 LevelVariants.Add(i);
                 TotemLevelVariants.Add(i);
             }
         }
-        
-        public void UpdateTitanImage()
+
+        private void SetSubscriptions()
+        {
+            ElementalOffenceArt.PropertyChanged += NotifyCalculator;
+            ElementalDefenceArt.PropertyChanged += NotifyCalculator;
+            SealArt.PropertyChanged += UpdateStats;
+            foreach (var guise in Guises)
+            {
+                guise.PropertyChanged += UpdateStats;
+            }
+        }
+
+        private void UpdateTitanImage()
         {
             if (TitanSourceInfo == null)
             {
@@ -143,18 +201,18 @@ namespace HWEnchCalc.Titan
             PropertyChangedByName(nameof(BorderImage));
         }
 
-        public void Update(TitanInfoDbo titanInfoDbo)
+        private void UpdateGuises()
         {
-            Name = titanInfoDbo.Name;
-            Level = titanInfoDbo.Level;
-            StarCount = titanInfoDbo.StarCount;
-            Attack = titanInfoDbo.Attack;
-            Hp = titanInfoDbo.Hp;
-            TotemLevel = titanInfoDbo.TotemLevel;
-            TotemStars = titanInfoDbo.TotemStars;
-            FirstArt.UpdateFromDbo(titanInfoDbo.FirstArtefact);
-            SecondArt.UpdateFromDbo(titanInfoDbo.SecondArtefact);
-            SealArt.UpdateFromDbo(titanInfoDbo.SealArtefact);
+            if(Guises == null) return;
+
+            Guises.Clear();
+
+            foreach (var guiseType in TitanSourceInfo.Guises)
+            {
+                var guise = new GuiseInfo(guiseType, _titanHelper);
+                guise.PropertyChanged += UpdateStats;
+                Guises.Add(guise);
+            }
         }
 
         private void UpdateStats(object sender, PropertyChangedEventArgs e)
@@ -172,8 +230,8 @@ namespace HWEnchCalc.Titan
         {
             if (TitanSourceInfo == null)
             {
-                Hp = 0;
-                Attack = 0;
+                TotalHp = 0;
+                TotalAttack = 0;
                 return;
             }
 
@@ -182,11 +240,13 @@ namespace HWEnchCalc.Titan
                 StarCount = TitanSourceInfo.MinStarLevel;
             }
 
-            var (hp, attack) = _titanHelper.GetHpAndAttack(TitanSourceInfo, Level, StarCount);
-            var totemBonus = _titanHelper.TotemHelper.GetTotemHpAndAttackBonus(TitanSourceInfo.TotemType, TotemLevel, TotemStars);
+            var HpAndAttackPerTitanLevel = _titanHelper.GetHpAndAttack(TitanSourceInfo, Level, StarCount);
+            var totemBonus =
+                _titanHelper.TotemHelper.GetTotemHpAndAttackBonus(TitanSourceInfo.TotemType, TotemLevel, TotemStars);
+            var guiseBonus = _titanHelper.GuiseHelper.GetGuisesHpAndAttackBonus(Guises);
 
-            Hp = hp + totemBonus.hp + SealArt.Hp;
-            Attack = attack + totemBonus.attack + SealArt.Attack;
+            TotalHp = HpAndAttackPerTitanLevel.Hp + totemBonus.hp + SealArt.Hp + guiseBonus.hp;
+            TotalAttack = HpAndAttackPerTitanLevel.Attack + totemBonus.attack + SealArt.Attack + guiseBonus.attack;
         }
 
         private void NotifyCalculator(object sender, PropertyChangedEventArgs e)

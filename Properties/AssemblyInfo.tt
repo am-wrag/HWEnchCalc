@@ -6,8 +6,8 @@
 
 using System.Reflection;
 
-[assembly: AssemblyVersion("0.9.<#= this.days #>.<#= this.min #>")]
-[assembly: AssemblyFileVersion("0.9.<#= this.days #>.<#= this.min #>")]
+[assembly: AssemblyVersion("0.7.<#= this.days #>.<#= this.min #>")]
+[assembly: AssemblyFileVersion("0.7.<#= this.days #>.<#= this.min #>")]
 <#+
 int days = (int)(DateTime.Now - new DateTime(2019, 04, 25)).TotalDays;
 int min = (int)(DateTime.Now - new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 0, 0, 0)).TotalMinutes;
