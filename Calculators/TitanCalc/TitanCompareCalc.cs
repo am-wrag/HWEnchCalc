@@ -17,8 +17,8 @@ namespace HWEnchCalc.Calculators.TitanCalc
         public string GuiseStoneResultText { get; private set; }
 
         private const string ResultEqualsTextBase = "Значения равны";
-        private const string LeftMoreResultText = "<< У левого больше на";
-        private const string RightMoreResultText = "У правого больше на >>";
+        private const string LeftMoreResultText = "> Слева больше";
+        private const string RightMoreResultText = "Справа больше <";
 
 
         public void Caclulate(TitanCompareData leftTitanData, TitanCompareData rightTitanData)
@@ -31,21 +31,21 @@ namespace HWEnchCalc.Calculators.TitanCalc
 
         private void CalculateGuise(TitanCompareData leftTitanData, TitanCompareData rightTitanData)
         {
-            var rait = (double)leftTitanData.TotalGuiseStone / rightTitanData.TotalGuiseStone;
+            var diff = leftTitanData.TotalGuiseStone - rightTitanData.TotalGuiseStone;
 
-            if (rait < 1)
+            if (diff < 0)
             {
-                GuiseStonePrecResult = Math.Round((1 / rait - 1) * 100, 2);
+                GuiseStonePrecResult = rightTitanData.TotalGuiseStone - leftTitanData.TotalGuiseStone;
                 GuiseStoneResultText = RightMoreResultText;
             }
-            if (rait > 1)
+            if (diff > 0)
             {
-                GuiseStonePrecResult = Math.Round((rait - 1) * 100, 2);
+                GuiseStonePrecResult = diff;
                 GuiseStoneResultText = LeftMoreResultText;
             }
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rait == 1)
+            if (diff == 0)
             {
                 GuiseStonePrecResult = 0;
                 GuiseStoneResultText = ResultEqualsTextBase;
@@ -57,21 +57,21 @@ namespace HWEnchCalc.Calculators.TitanCalc
 
         private void CalculateEssence(TitanCompareData leftTitanData, TitanCompareData rightTitanData)
         {
-            var rait = (double)leftTitanData.TotalEsscence / rightTitanData.TotalEsscence;
+            var diff = leftTitanData.TotalEsscence - rightTitanData.TotalEsscence;
 
-            if (rait < 1)
+            if (diff < 0)
             {
-                EssencePrecResult = Math.Round((1 / rait - 1) * 100, 2);
+                EssencePrecResult = rightTitanData.TotalEsscence - leftTitanData.TotalEsscence;
                 EssenceResultText = RightMoreResultText;
             }
-            if (rait > 1)
+            if (diff > 0)
             {
-                EssencePrecResult = Math.Round((rait - 1) * 100, 2);
+                EssencePrecResult = diff;
                 EssenceResultText = LeftMoreResultText;
             }
 
             // ReSharper disable once CompareOfFloatsByEqualityOperator
-            if (rait == 1)
+            if (diff == 0)
             {
                 EssencePrecResult = 0;
                 EssenceResultText = ResultEqualsTextBase;

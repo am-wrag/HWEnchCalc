@@ -18,7 +18,7 @@ namespace HWEnchCalc
             Global<ProgressDialogController>
                 .SetAwaitDialog(this.ShowProgressAsync("Пожалуйста подождите", "Идет выгрузка данных..."));
 
-            Title = $"{Title} preAlfa v{Assembly.GetExecutingAssembly().GetName().Version}";
+            Title = $"{Title} beta v{Assembly.GetExecutingAssembly().GetName().Version}";
 
             var config = ConfigurationManager.GetConfig();
             DataContext = new HwEnchCalcViewModel(config);
