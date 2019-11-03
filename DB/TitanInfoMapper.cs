@@ -11,18 +11,18 @@ using HWEnchCalc.Titan.Helper;
 
 namespace HWEnchCalc.DB
 {
-    public class TitanInfoBuilder
+    public class TitanInfoMapper
     {
         private readonly TitanSourceDataHelper _titanHelper;
 
-        public TitanInfoBuilder(TitanSourceDataHelper titanHelper)
+        public TitanInfoMapper(TitanSourceDataHelper titanHelper)
         {
             _titanHelper = titanHelper;
         }
 
-        public TitanInfoDbo GeTitanInfoDbo(TitanInfo titanInfo)
+        public TitanInfoDto GeTitanInfoDto(TitanInfo titanInfo)
         {
-            return new TitanInfoDbo
+            return new TitanInfoDto
             {
                 Name = titanInfo.Name,
                 Level = titanInfo.Level,
@@ -34,7 +34,7 @@ namespace HWEnchCalc.DB
                 Ticks = DateTime.Now.Ticks,
 
                 Guises = titanInfo.Guises.Select(
-                        g => new GuiseInfoDbo
+                        g => new GuiseInfoDto
                         {
                             GuiseType = g.GuiseType,
                             Level = g.Level,
@@ -44,7 +44,7 @@ namespace HWEnchCalc.DB
                         })
                     .ToList(),
 
-                ElementalOffenceArtefact = new ElementArtInfoDbo
+                ElementalOffenceArtefact = new ElementArtInfoDto
                 {
                     ArtefactType = titanInfo.ElementalOffenceArt.ArtefactType,
                     LevelUpCost = titanInfo.ElementalOffenceArt.LevelUpCost,
@@ -53,7 +53,7 @@ namespace HWEnchCalc.DB
                     StarCount = titanInfo.ElementalOffenceArt.StarCount,
                     StatValue = titanInfo.ElementalOffenceArt.StatValue
                 },
-                ElementalDefenceAtrefact = new ElementArtInfoDbo
+                ElementalDefenceAtrefact = new ElementArtInfoDto
                 {
                     ArtefactType = titanInfo.ElementalDefenceArt.ArtefactType,
                     LevelUpCost = titanInfo.ElementalDefenceArt.LevelUpCost,
@@ -62,7 +62,7 @@ namespace HWEnchCalc.DB
                     StarCount = titanInfo.ElementalDefenceArt.StarCount,
                     StatValue = titanInfo.ElementalDefenceArt.StatValue
                 },
-                SealArtefact = new SealArtInfoDbo
+                SealArtefact = new SealArtInfoDto
                 {
                     ArtefactType = titanInfo.SealArt.ArtefactType,
                     Level = titanInfo.SealArt.Level,
@@ -74,14 +74,13 @@ namespace HWEnchCalc.DB
             };
         }
 
-        public ObservableCollection<TitanShowedData> GetIitanShowedDatas(List<TitanInfoDbo> titanInfoDbo)
+        public ObservableCollection<TitanShowedData> GetTitanShowedData(List<TitanInfoDto> titanInfoDbo)
         {
             return titanInfoDbo.Select(GetTitanShowedData).ToObservable();
         }
 
-        public TitanShowedData GetTitanShowedData(TitanInfoDbo titanDbo)
+        public TitanShowedData GetTitanShowedData(TitanInfoDto titanDbo)
         {
-
             var elementalOffenceArt =
             new ElementalArtInfo(titanDbo.ElementalOffenceArtefact.ArtefactType, _titanHelper)
             {
@@ -128,7 +127,7 @@ namespace HWEnchCalc.DB
             return new TitanShowedData(titanDbo.Id, titanDbo.Ticks, titanInfo);
         }
 
-        private ObservableCollection<GuiseInfo> GetGuises(List<GuiseInfoDbo> guisesDbo)
+        private ObservableCollection<GuiseInfo> GetGuises(List<GuiseInfoDto> guisesDbo)
         {
             var result = new ObservableCollection<GuiseInfo>();
 

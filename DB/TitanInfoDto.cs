@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HWEnchCalc.DB
 {
     //[Table("[TitanInfos]")]
-    public class TitanInfoDbo
+    public class TitanInfoDto
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -16,9 +16,9 @@ namespace HWEnchCalc.DB
         public double TotalHp { get; set; }
         public long Ticks { get; set; }
 
-        public ElementArtInfoDbo ElementalOffenceArtefact { get; set; }
-        public ElementArtInfoDbo ElementalDefenceAtrefact { get; set; }
-        public SealArtInfoDbo SealArtefact { get; set; }
-        public List<GuiseInfoDbo> Guises { get; set; }
+        public ElementArtInfoDto ElementalOffenceArtefact { get; set; }
+        public ElementArtInfoDto ElementalDefenceAtrefact { get; set; }
+        public SealArtInfoDto SealArtefact { get; set; }
+        public List<GuiseInfoDto> Guises { get; set; }
     }
 }

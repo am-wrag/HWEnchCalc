@@ -2,15 +2,14 @@
 
 namespace HWEnchCalc.DB
 {
-
-    public class SealArtInfoDbo
+    public class ElementArtInfoDto
     {
         public int Id { get; set; }
         public ArtefactType ArtefactType { get; set; }
         public int Level { get; set; }
-        public double Hp { get; set; }
-        public double Attack { get; set; }
+        public double StatValue { get; set; }
+        public double IncreaseStatValue { get; set; }
         public int StarCount { get; set; }
-        public int LevelUpCost { get; set; }
+        public double LevelUpCost { get; set; }
     }
 }

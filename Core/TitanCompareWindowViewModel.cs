@@ -17,11 +17,11 @@ namespace HWEnchCalc.Core
             LeftTitanData = new TitanCompareData(titansData, titanHelper);
             RightTitanData = new TitanCompareData(titansData, titanHelper);
             TitanCompareCalc = new TitanCompareCalc();
-            LeftTitanData.PropertyChanged += Caclulate;
-            RightTitanData.PropertyChanged += Caclulate;
+            LeftTitanData.PropertyChanged += Calculate;
+            RightTitanData.PropertyChanged += Calculate;
         }
 
-        private void Caclulate(object sender, PropertyChangedEventArgs e)
+        private void Calculate(object sender, PropertyChangedEventArgs e)
         {
             TitanCompareCalc.Caclulate(LeftTitanData, RightTitanData);
             PropertyChangedByName(nameof(TitanCompareCalc));

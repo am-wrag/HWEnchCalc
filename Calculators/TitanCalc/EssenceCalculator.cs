@@ -11,8 +11,8 @@ namespace HWEnchCalc.Calculators.TitanCalc
         public double Result { get; private set; }
         public string ResultDesc { get; private set; } = "Результат:";
 
-        private const string AtackBetterThenDefMessage = "Результат: атака лучше защиты";
-        private const string DefBetterThenAtackMessage = "Результат: защита лучше атаки";
+        private const string AttackBetterThenDefMessage = "Результат: атака лучше защиты";
+        private const string DefBetterThenAttackMessage = "Результат: защита лучше атаки";
 
         private double _hpIncreaseEffective = 1;
         private double _attackIncreaseEffective = 1;
@@ -37,12 +37,12 @@ namespace HWEnchCalc.Calculators.TitanCalc
 
             if (totalRait > 1)
             {
-                ResultDesc = DefBetterThenAtackMessage;
+                ResultDesc = DefBetterThenAttackMessage;
                 Result = (totalRait - 1) * 100;
             }
             else
             {
-                ResultDesc = AtackBetterThenDefMessage;
+                ResultDesc = AttackBetterThenDefMessage;
                 Result = (1 / totalRait - 1) * 100;
             }
 

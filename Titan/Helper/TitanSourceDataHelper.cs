@@ -18,7 +18,7 @@ namespace HWEnchCalc.Titan.Helper
         private List<TitanSourceInfo> _titanSourceInfo = new List<TitanSourceInfo>();
 
         //из игровых формул
-        private const double TitalLevelPowСoefficient = 1.5;
+        private const double TitanLevelPowCoefficient = 1.5;
 
         public TitanSourceDataHelper Fill(Configuration config)
         {
@@ -41,23 +41,23 @@ namespace HWEnchCalc.Titan.Helper
             return _titanSourceInfo.Select(t => t.Name).ToList();
         }
 
-        public TitanSourceInfo GetTitanSourseInfo(string titanName)
+        public TitanSourceInfo GetTitanSourceInfo(string titanName)
         {
             return _titanSourceInfo.Find(t => t.Name == titanName);
         }
 
         public (double Hp, double Attack) GetHpAndAttack(TitanSourceInfo titan, int level, int starCount)
         {
-            var levelModyfier = Math.Pow(level, TitalLevelPowСoefficient);
+            var levelModifier = Math.Pow(level, TitanLevelPowCoefficient);
             var statsPerStar = titan.StatsPerLevelPerStar.Find(s => s.StarCount == starCount);
 
-            var hp = statsPerStar.Hp * levelModyfier + titan.HpStart;
-            var atack = statsPerStar.Attack * levelModyfier + titan.AttackStart;
+            var hp = statsPerStar.Hp * levelModifier + titan.HpStart;
+            var attack = statsPerStar.Attack * levelModifier + titan.AttackStart;
 
-            return (Math.Round(hp, 1), Math.Round(atack, 1));
+            return (Math.Round(hp, 1), Math.Round(attack, 1));
         }
 
-        private IEnumerable<TitanSourceInfo> GetSourceTitanInfo(TitanDatas titanDatas)
+        private IEnumerable<TitanSourceInfo> GetSourceTitanInfo(TitanData titanDatas)
         {
             var titansDir = new DirectoryInfo(titanDatas.TitanFolder);
 

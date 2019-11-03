@@ -9,7 +9,7 @@ namespace HWEnchCalc.DB
     {
         private readonly string _dbConnectionString;
 
-        public DbSet<TitanInfoDbo> TitanInfos { get; set; }
+        public DbSet<TitanInfoDto> TitanInfos { get; set; }
 
         public DbOperator( string dbConnectionString)
         {
@@ -27,22 +27,22 @@ namespace HWEnchCalc.DB
         {
             //var converter = new EnumToStringConverter<ArtefactType>();
 
-            modelBuilder.Entity<TitanInfoDbo>()
+            modelBuilder.Entity<TitanInfoDto>()
                 .HasOne(c => c.ElementalOffenceArtefact);
-            modelBuilder.Entity<TitanInfoDbo>()
+            modelBuilder.Entity<TitanInfoDto>()
                 .HasOne(c => c.ElementalDefenceAtrefact);
-            modelBuilder.Entity<TitanInfoDbo>()
+            modelBuilder.Entity<TitanInfoDto>()
                 .HasOne(c => c.SealArtefact);
-            modelBuilder.Entity<TitanInfoDbo>()
+            modelBuilder.Entity<TitanInfoDto>()
                 .HasMany(c => c.Guises);
         }
 
-        public Task AddTitanInfoAsync(TitanInfoDbo calcInfo)
+        public Task AddTitanInfoAsync(TitanInfoDto calcInfo)
         {
             return Task.Factory.StartNew(() => AddTitanCalcInfo(calcInfo));
         }
 
-        public void AddTitanCalcInfo(TitanInfoDbo calcInfo)
+        public void AddTitanCalcInfo(TitanInfoDto calcInfo)
         {
             TitanInfos.Add(calcInfo);
             SaveChanges();
@@ -64,12 +64,12 @@ namespace HWEnchCalc.DB
             Database.EnsureCreated();
         }
 
-        public Task<List<TitanInfoDbo>> GetTitanCalculatedInfoAsync()
+        public Task<List<TitanInfoDto>> GetTitanCalculatedInfoAsync()
         {
             return Task.Factory.StartNew(GetTitanCalculatedInfo);
         }
 
-        public List<TitanInfoDbo> GetTitanCalculatedInfo()
+        public List<TitanInfoDto> GetTitanCalculatedInfo()
         {
             return TitanInfos?
                 .Include(d => d.ElementalOffenceArtefact)

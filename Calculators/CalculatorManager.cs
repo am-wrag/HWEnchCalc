@@ -13,36 +13,36 @@ namespace HWEnchCalc.Calculators
         private const string GoldCalcDest = "Вычисление эффективности прокачки титана по отношению к прокачке 3го артефакта!";
         private const int MaxCalculatorIndex = 1;
 
-        public string CalcBannerText => _currenCalculatorIndex == 0 ? EssenceCalcDesc: GoldCalcDest;
+        public string CalcBannerText => _currentCalculatorIndex == 0 ? EssenceCalcDesc: GoldCalcDest;
 
         public int CurrentCalculatorIndex
         {
-            get => _currenCalculatorIndex;
+            get => _currentCalculatorIndex;
             set
             {
-                _currenCalculatorIndex = value;
+                _currentCalculatorIndex = value;
                 PropertyChangedByMember();
                 PropertyChangedByName(nameof(CalcBannerText));
             }
         }
 
         public Visibility NextBtnVisibility =>
-            _currenCalculatorIndex == MaxCalculatorIndex ? Visibility.Hidden : Visibility.Visible;
+            _currentCalculatorIndex == MaxCalculatorIndex ? Visibility.Hidden : Visibility.Visible;
         public Visibility PrevBtnVisibility => 
-            _currenCalculatorIndex == 0 ? Visibility.Hidden : Visibility.Visible;
+            _currentCalculatorIndex == 0 ? Visibility.Hidden : Visibility.Visible;
 
         public WpfCommand NextCalcCommand { get; }
-        public WpfCommand PreviosCalcCommand { get; }
+        public WpfCommand PreviousCalcCommand { get; }
 
-        private int _currenCalculatorIndex;
+        private int _currentCalculatorIndex;
 
         public CalculatorManager()
         {
-            NextCalcCommand = new WpfCommand(SetNextCalulator);
-            PreviosCalcCommand = new WpfCommand(SetPreviosCalulator);
+            NextCalcCommand = new WpfCommand(SetNextCalculator);
+            PreviousCalcCommand = new WpfCommand(SetPreviousCalculator);
         }
 
-        private void SetNextCalulator()
+        private void SetNextCalculator()
         {
             if (CurrentCalculatorIndex + 1 > MaxCalculatorIndex) return;
 
@@ -51,7 +51,7 @@ namespace HWEnchCalc.Calculators
             UpdateVisibility();
         }
 
-        private void SetPreviosCalulator()
+        private void SetPreviousCalculator()
         {
             if (CurrentCalculatorIndex - 1 < 0) return;
 

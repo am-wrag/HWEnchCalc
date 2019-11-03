@@ -71,7 +71,7 @@ namespace HWEnchCalc.Titan.ArtefactData
             _artefactHelper = titanHelper.SealArtefactHelper;
         }
 
-        public void UpdateFromDbo(SealArtInfoDbo artInfo)
+        public void UpdateFromDbo(SealArtInfoDto artInfo)
         {
             ArtefactType = artInfo.ArtefactType;
             Level = artInfo.Level;

@@ -38,7 +38,7 @@ namespace HWEnchCalc.Titan.Helper
                 .ToList();
         }
 
-        public void GetTitanArtefactInfos(TitanDatas titanDatas)
+        public void GetTitanArtefactInfos(TitanData titanDatas)
         {
             var titansArtDir = new DirectoryInfo(titanDatas.ArtefactLevelDataFolder);
 

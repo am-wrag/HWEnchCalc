@@ -174,7 +174,7 @@
             <mah:FlipView HorizontalAlignment="Left" Height="159" Grid.Column="0" BorderThickness="1"
                           Margin="5,316,0,0" VerticalAlignment="Top" Width="540" Foreground="{x:Null}"
                           SelectedIndex="{Binding CalculatorIndex}"
-                          BannerText="{Binding CaclulatorDesc}"
+                          BannerText="{Binding CalculatorDesc}"
                           MouseHoverBorderBrush="{x:Null}">
                 <mah:FlipView.Items>
                     <GroupBox DataContext="{Binding EssenceCalc}" Background="#CC246108">

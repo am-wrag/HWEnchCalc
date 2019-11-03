@@ -191,11 +191,11 @@
     <Compile Include="Calculators\TitanCalc\TitanCompareCalc.cs" />
     <Compile Include="Calculators\TitanCalc\TitanCompareData.cs" />
     <Compile Include="Core\TitanCompareWindowViewModel.cs" />
-    <Compile Include="DB\GuiseInfoDbo.cs" />
-    <Compile Include="DB\TitanInfoBuilder.cs" />
-    <Compile Include="DB\SealArtInfoDbo.cs" />
-    <Compile Include="DB\ElementArtInfoDbo.cs" />
-    <Compile Include="DB\TitanInfoDbo.cs" />
+    <Compile Include="DB\GuiseInfoDto.cs" />
+    <Compile Include="DB\TitanInfoMapper.cs" />
+    <Compile Include="DB\SealArtInfoDto.cs" />
+    <Compile Include="DB\ElementArtInfoDto.cs" />
+    <Compile Include="DB\TitanInfoDto.cs" />
     <None Include="ReleaseScript.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

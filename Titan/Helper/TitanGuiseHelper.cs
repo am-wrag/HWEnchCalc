@@ -13,12 +13,12 @@ namespace HWEnchCalc.Titan.Helper
         private readonly Dictionary<GuiseType, List<GuiseSourseInfo>> _guiseLevels
             = new Dictionary<GuiseType, List<GuiseSourseInfo>>();
 
-        public TitanGuiseHelper(TitanDatas data)
+        public TitanGuiseHelper(TitanData data)
         {
             GetGuiseLevels(data);
         }
 
-        private void GetGuiseLevels(TitanDatas titanData)
+        private void GetGuiseLevels(TitanData titanData)
         {
             var guisesDir = new DirectoryInfo(titanData.GuiseLevelsFolder);
 

@@ -2,6 +2,6 @@
 {
     public class GameInfo
     {
-        public TitanDatas TitanDatas { get; set; }
+        public TitanData TitanDatas { get; set; }
     }
 }

@@ -39,19 +39,19 @@ namespace HWEnchCalc.Calculators.TitanCalc
             set
             {
                 _selectedTableIndex = value;
-                UpdateCurrentCaltInfo();
+                UpdateCurrentCalcInfo();
             }
         }
 
         public TitanInfo TitanInfo { get; private set; }
 
         private readonly TitanSourceDataHelper _titanHelper;
-        private readonly TitanInfoBuilder _titanBuilder;
+        private readonly TitanInfoMapper _titanBuilder;
         private readonly DbOperator _dbOperator;
         private int _selectedTableIndex = -1;
         private bool _isDbLoading = true;
 
-        public TitanCalculationDataManager(TitanInfoBuilder titanBuilder, TitanSourceDataHelper titanHelper, DbOperator dbOperator)
+        public TitanCalculationDataManager(TitanInfoMapper titanBuilder, TitanSourceDataHelper titanHelper, DbOperator dbOperator)
         {
             _titanBuilder = titanBuilder;
             _dbOperator = dbOperator;
@@ -66,14 +66,14 @@ namespace HWEnchCalc.Calculators.TitanCalc
             DeleteEntryCommand = new WpfCommand(DeleteCalcResult);
             ClearCommand = new WpfCommand(ClearCalcInfo);
 
-            GetPreviosCalculateResult();
+            GetPreviousCalculateResult();
         }
-        private async void GetPreviosCalculateResult()
+        private async void GetPreviousCalculateResult()
         {
             var titanDboInfos = await _dbOperator.GetTitanCalculatedInfoAsync();
             IsDbLoading = false;
 
-            TitanShowedData = _titanBuilder.GetIitanShowedDatas(titanDboInfos);
+            TitanShowedData = _titanBuilder.GetTitanShowedData(titanDboInfos);
             
             PropertyChangedByName(nameof(IsDbLoading));
             PropertyChangedByName(nameof(TitanShowedData));
@@ -83,13 +83,13 @@ namespace HWEnchCalc.Calculators.TitanCalc
             if (!TitanCalculatorCore.CheckAllTitanStatsIsNoZero(TitanInfo)) return;
             IsDbLoading = true;
 
-            var titanInfoDbo = _titanBuilder.GeTitanInfoDbo(TitanInfo);
+            var titanInfoDbo = _titanBuilder.GeTitanInfoDto(TitanInfo);
 
             await _dbOperator.AddTitanInfoAsync(titanInfoDbo);
             IsDbLoading = false;
 
             var titanDboInfos = await _dbOperator.GetTitanCalculatedInfoAsync();
-            TitanShowedData = _titanBuilder.GetIitanShowedDatas(titanDboInfos);
+            TitanShowedData = _titanBuilder.GetTitanShowedData(titanDboInfos);
 
             PropertyChangedByName(nameof(TitanShowedData));
         }
@@ -119,7 +119,7 @@ namespace HWEnchCalc.Calculators.TitanCalc
             new TitanCompareWindow(TitanShowedData, _titanHelper).ShowDialog();
         }
 
-        private void UpdateCurrentCaltInfo()
+        private void UpdateCurrentCalcInfo()
         {
             //Отсутствие выделенной строки по умолчанию назначает SelectedIndex для DataGrid в -1
             if (SelectedTableIndex < 0) return;

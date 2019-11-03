@@ -1,6 +1,6 @@
 ﻿namespace HWEnchCalc.Config
 {
-    public class TitanDatas
+    public class TitanData
     {
         public string ArtefactLevelDataFolder { get; set; }
         public string TitanFolder { get; set; }

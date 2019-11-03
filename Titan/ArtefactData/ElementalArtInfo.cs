@@ -98,7 +98,7 @@ namespace HWEnchCalc.Titan.ArtefactData
             UpdateStats();
         }
 
-        public void UpdateFromDbo(ElementArtInfoDbo artInfo)
+        public void UpdateFromDbo(ElementArtInfoDto artInfo)
         {
             ArtefactType = artInfo.ArtefactType;
             Level = artInfo.Level;

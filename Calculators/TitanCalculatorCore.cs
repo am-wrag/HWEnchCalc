@@ -23,28 +23,29 @@ namespace HWEnchCalc.Calculators
             set
             {
                 _calculatorIndex = value;
-                PropertyChangedByName(nameof(CaclulatorDesc));
+                PropertyChangedByName(nameof(CalculatorDesc));
             }
         }
-        public string CaclulatorDesc => GetCaclulatorDesc();
+
+        public string CalculatorDesc => GetCalculatorDesc();
 
         private int _calculatorIndex;
+
         public TitanCalculatorCore(Configuration config)
         {
-            InitializateAsync(config);
+            InitializeAsync(config);
         }
 
-        private async void InitializateAsync(Configuration config)
+        private async void InitializeAsync(Configuration config)
         {
             var awaitDialogController = await Global<ProgressDialogController>.ShowAwaitDialog();
             awaitDialogController.SetIndeterminate();
             //awaitDialogController.SetProgress(0.9);
 
-            await Task.Delay(TimeSpan.FromMilliseconds(200));
             var titanHelper = await ParseTitanData(config);
             awaitDialogController.SetMessage("Выгрузка данных завершена!");
 
-            var titanBuilder = new TitanInfoBuilder(titanHelper);
+            var titanBuilder = new TitanInfoMapper(titanHelper);
             var dbOperator = new DbOperator(config.ConnectionInfo.DefaultConnection);
 
             CalcManager = new TitanCalculationDataManager(titanBuilder, titanHelper, dbOperator);
@@ -72,7 +73,7 @@ namespace HWEnchCalc.Calculators
             GuiseCalc.Calculate(CalcManager.TitanInfo);
         }
 
-        private string GetCaclulatorDesc()
+        private string GetCalculatorDesc()
         {
             switch (CalculatorIndex)
             {
@@ -80,7 +81,7 @@ namespace HWEnchCalc.Calculators
                     return "Вычисление эффективности прокачки стихийных атрефактов";
                 case 1:
                     return "Вычисление эффективности прокачки обликов";
-                    
+
                 default: return string.Empty;
             }
         }

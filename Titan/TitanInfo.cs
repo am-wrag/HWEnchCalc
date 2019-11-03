@@ -104,7 +104,7 @@ namespace HWEnchCalc.Titan
         public string TotemName => _titanHelper.TotemHelper.GetName(TitanSourceInfo);
         [NotMapped] public BitmapImage TotemImage => _titanHelper.TotemHelper.GetTotemImage(TitanSourceInfo);
 
-        private TitanSourceInfo TitanSourceInfo => _titanHelper.GetTitanSourseInfo(_name);
+        private TitanSourceInfo TitanSourceInfo => _titanHelper.GetTitanSourceInfo(_name);
         private readonly TitanSourceDataHelper _titanHelper;
         private double _totalAttack;
         private double _totalHp;

@@ -3,7 +3,7 @@ using HWEnchCalc.Titan.Guise;
 
 namespace HWEnchCalc.DB
 {
-    public class GuiseInfoDbo
+    public class GuiseInfoDto
     {
         public int Id { get; set; }
         public GuiseType GuiseType { get; set; }
